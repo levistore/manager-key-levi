@@ -1,0 +1,2427 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-[#f3f4f6]">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LVCODEX Key Manager - Premium Neo-Brutalist Licence SaaS</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        display: ['Space Grotesk', 'sans-serif'],
+                    },
+                    boxShadow: {
+                        'neo': '4px 4px 0px 0px #000000',
+                        'neo-lg': '8px 8px 0px 0px #000000',
+                        'neo-sm': '2px 2px 0px 0px #000000',
+                        'neo-hover': '2px 2px 0px 0px #000000',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+        .neo-title {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        /* Custom scrollbar neo-brutalist */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f3f4f6;
+            border-left: 2px solid #000;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #000;
+            border: 2px solid #f3f4f6;
+        }
+        /* Utility styles */
+        .neo-border {
+            border: 3px solid #000000;
+        }
+        .neo-border-sm {
+            border: 2px solid #000000;
+        }
+        .neo-interactive {
+            transition: all 0.15s ease-in-out;
+        }
+        .neo-interactive:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0px 0px #000000;
+        }
+        .neo-interactive:active {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0px 0px #000000;
+        }
+        .neo-btn-primary {
+            background-color: #a3e635; /* Lime-400 */
+            color: #000000;
+        }
+        .neo-btn-secondary {
+            background-color: #ffffff;
+            color: #000000;
+        }
+        .neo-btn-danger {
+            background-color: #f87171; /* Red-400 */
+            color: #000000;
+        }
+        .neo-btn-warning {
+            background-color: #fbbf24; /* Amber-400 */
+            color: #000000;
+        }
+        .neo-btn-info {
+            background-color: #60a5fa; /* Blue-400 */
+            color: #000000;
+        }
+        /* Sidebar active link marker */
+        .sidebar-active {
+            background-color: #000000 !important;
+            color: #ffffff !important;
+            transform: translate(-2px, -2px);
+            box-shadow: 4px 4px 0px 0px #a3e635 !important;
+        }
+    </style>
+</head>
+<body class="h-full text-black antialiased bg-[#f8fafc] overflow-hidden">
+
+    <!-- TOAST CONTAINER -->
+    <div id="toast-container" class="fixed top-5 right-5 z-50 flex flex-col gap-3 max-w-sm w-full"></div>
+
+    <!-- MAIN APP WRAPPER -->
+    <div id="app" class="h-full flex flex-col md:flex-row overflow-hidden">
+        
+        <!-- LOGIN SCREEN (Rendered if not logged in) -->
+        <div id="login-screen" class="fixed inset-0 z-50 bg-[#fef08a] flex items-center justify-center p-4">
+            <div class="w-full max-w-md bg-white neo-border neo-shadow shadow-neo-lg p-8 relative">
+                <!-- Decorative neo tag -->
+                <div class="absolute -top-5 -left-3 bg-black text-white px-4 py-1 neo-title font-bold text-sm uppercase tracking-wider neo-border-sm transform -rotate-2">
+                    LVCODEX SECURE LOG
+                </div>
+                <div class="absolute -bottom-4 -right-3 bg-[#a3e635] text-black px-3 py-1 neo-title font-bold text-xs neo-border-sm transform rotate-1">
+                    v2.5 Production-Ready
+                </div>
+
+                <div class="text-center mb-8 mt-4">
+                    <h1 class="neo-title text-4xl font-extrabold tracking-tight uppercase">LVCODEX</h1>
+                    <p class="text-xs font-bold tracking-widest text-gray-500 uppercase mt-1">Key Management Engine</p>
+                </div>
+
+                <!-- ALERT BOX INSIDE LOGIN -->
+                <div id="login-error" class="hidden mb-6 p-4 bg-[#f87171] neo-border-sm shadow-neo-sm text-sm font-semibold flex items-center gap-3">
+                    <i class="fa-solid fa-triangle-exclamation text-lg"></i>
+                    <span id="login-error-text">Kombinasi User & Password salah!</span>
+                </div>
+
+                <form id="login-form" class="space-y-6">
+                    <div>
+                        <label class="block text-sm font-bold uppercase tracking-wider mb-2">Username / Email</label>
+                        <input type="text" id="login-username" required class="w-full px-4 py-3 neo-border-sm bg-gray-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-black font-medium text-lg placeholder-gray-400" placeholder="admin / reseller">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold uppercase tracking-wider mb-2">Password</label>
+                        <input type="password" id="login-password" required class="w-full px-4 py-3 neo-border-sm bg-gray-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-black font-medium text-lg placeholder-gray-400" placeholder="••••••••">
+                    </div>
+                    
+                    <div class="flex items-center justify-between">
+                        <label class="flex items-center gap-2 cursor-pointer select-none">
+                            <input type="checkbox" class="w-5 h-5 neo-border-sm rounded-none accent-black cursor-pointer">
+                            <span class="text-xs font-bold uppercase">Ingat Sesi Saya</span>
+                        </label>
+                        <span class="text-xs font-bold text-gray-500 uppercase cursor-pointer hover:underline">Butuh Bantuan?</span>
+                    </div>
+
+                    <button type="submit" id="btn-login-submit" class="w-full py-4 neo-btn-primary neo-border neo-title font-extrabold text-xl tracking-wider uppercase neo-interactive shadow-neo">
+                        MASUK SISTEM <i class="fa-solid fa-arrow-right-long ml-2"></i>
+                    </button>
+                </form>
+
+                <div class="mt-8 pt-6 border-t-2 border-black border-dashed text-center">
+                    <p class="text-xs font-bold text-gray-400 uppercase">
+                        Sistem Berbasis Spreadsheet & GAS Backend.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- MAIN APP INTERFACE (Hidden initially until successful login) -->
+        <div id="app-interface" class="hidden w-full h-full flex flex-col md:flex-row overflow-hidden">
+            
+            <!-- SIDEBAR -->
+            <aside class="w-full md:w-64 bg-white border-b-4 md:border-b-0 md:border-r-4 border-black flex flex-col h-auto md:h-full z-20">
+                <!-- Branding Header -->
+                <div class="p-4 bg-black text-white flex items-center justify-between md:justify-center md:flex-col md:gap-2">
+                    <div class="flex items-center gap-2 md:mt-2">
+                        <div class="w-8 h-8 bg-[#a3e635] neo-border-sm flex items-center justify-center">
+                            <span class="text-black font-black text-lg font-display">L</span>
+                        </div>
+                        <span class="neo-title text-xl font-black tracking-wider text-white">LVCODEX</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span id="badge-role" class="bg-[#a3e635] text-black text-[10px] px-2 py-0.5 font-extrabold uppercase border border-black shadow-neo-sm">SUPER ADMIN</span>
+                        <!-- Mobile menu trigger -->
+                        <button id="mobile-menu-toggle" class="md:hidden text-white bg-neutral-800 p-1.5 border border-white">
+                            <i class="fa-solid fa-bars text-lg"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Navigation Links -->
+                <nav id="sidebar-nav" class="hidden md:flex flex-col gap-1 p-3 flex-1 overflow-y-auto bg-gray-50">
+                    <button data-target="dashboard" class="sidebar-btn flex items-center gap-3 px-4 py-3 font-bold text-sm uppercase tracking-wider text-black bg-white neo-border-sm shadow-neo-sm hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all">
+                        <i class="fa-solid fa-chart-line text-lg w-5"></i> Dashboard
+                    </button>
+                    <button data-target="licenses" class="sidebar-btn flex items-center gap-3 px-4 py-3 font-bold text-sm uppercase tracking-wider text-black bg-white neo-border-sm shadow-neo-sm hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all">
+                        <i class="fa-solid fa-key text-lg w-5"></i> Lisensi
+                    </button>
+                    <button data-target="generator" class="sidebar-btn flex items-center gap-3 px-4 py-3 font-bold text-sm uppercase tracking-wider text-black bg-white neo-border-sm shadow-neo-sm hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all">
+                        <i class="fa-solid fa-wand-magic-sparkles text-lg w-5"></i> Generator
+                    </button>
+                    <button data-target="resellers" class="sidebar-btn flex items-center gap-3 px-4 py-3 font-bold text-sm uppercase tracking-wider text-black bg-white neo-border-sm shadow-neo-sm hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all only-admin">
+                        <i class="fa-solid fa-users-viewfinder text-lg w-5"></i> Reseller
+                    </button>
+                    <button data-target="users" class="sidebar-btn flex items-center gap-3 px-4 py-3 font-bold text-sm uppercase tracking-wider text-black bg-white neo-border-sm shadow-neo-sm hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all">
+                        <i class="fa-solid fa-user-gear text-lg w-5"></i> Client / Users
+                    </button>
+                    <button data-target="products" class="sidebar-btn flex items-center gap-3 px-4 py-3 font-bold text-sm uppercase tracking-wider text-black bg-white neo-border-sm shadow-neo-sm hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all only-admin">
+                        <i class="fa-solid fa-cubes text-lg w-5"></i> Produk
+                    </button>
+                    <button data-target="devices" class="sidebar-btn flex items-center gap-3 px-4 py-3 font-bold text-sm uppercase tracking-wider text-black bg-white neo-border-sm shadow-neo-sm hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all">
+                        <i class="fa-solid fa-laptop-code text-lg w-5"></i> HWID Registry
+                    </button>
+                    <button data-target="analytics" class="sidebar-btn flex items-center gap-3 px-4 py-3 font-bold text-sm uppercase tracking-wider text-black bg-white neo-border-sm shadow-neo-sm hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all">
+                        <i class="fa-solid fa-chart-pie text-lg w-5"></i> Analytics
+                    </button>
+                    <button data-target="security" class="sidebar-btn flex items-center gap-3 px-4 py-3 font-bold text-sm uppercase tracking-wider text-black bg-white neo-border-sm shadow-neo-sm hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all only-admin">
+                        <i class="fa-solid fa-shield-halved text-lg w-5"></i> Security Center
+                    </button>
+                    <button data-target="logs" class="sidebar-btn flex items-center gap-3 px-4 py-3 font-bold text-sm uppercase tracking-wider text-black bg-white neo-border-sm shadow-neo-sm hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all only-admin">
+                        <i class="fa-solid fa-list-check text-lg w-5"></i> System Logs
+                    </button>
+                    <button data-target="settings" class="sidebar-btn flex items-center gap-3 px-4 py-3 font-bold text-sm uppercase tracking-wider text-black bg-white neo-border-sm shadow-neo-sm hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all">
+                        <i class="fa-solid fa-sliders text-lg w-5"></i> Settings
+                    </button>
+                </nav>
+
+                <!-- Profile Footer -->
+                <div class="p-4 border-t-4 border-black bg-[#fafafa] flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                        <div class="w-10 h-10 rounded-none bg-[#38bdf8] neo-border-sm flex items-center justify-center font-bold text-lg">
+                            <span id="user-avatar-char">A</span>
+                        </div>
+                        <div class="overflow-hidden">
+                            <p id="user-display-name" class="font-black text-sm truncate">Admin LvCodex</p>
+                            <p id="user-display-credits" class="text-xs font-bold text-[#16a34a] truncate">Credits: $15,000</p>
+                        </div>
+                    </div>
+                    <button id="btn-logout" class="p-2.5 bg-red-400 hover:bg-red-500 neo-border-sm shadow-neo-sm neo-interactive" title="Keluar">
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                    </button>
+                </div>
+            </aside>
+
+            <!-- MAIN CONTENT AREA -->
+            <main class="flex-1 flex flex-col h-full overflow-hidden">
+                <!-- Top Navbar -->
+                <header class="h-16 bg-white border-b-4 border-black px-6 flex items-center justify-between z-10 shrink-0">
+                    <div class="flex items-center gap-3">
+                        <h2 id="page-title" class="neo-title text-2xl font-black uppercase tracking-wider">Dashboard</h2>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <button id="btn-manual-sync" class="hidden sm:flex items-center gap-2 bg-[#a3e635] hover:bg-lime-500 neo-border-sm px-3 py-1 text-xs font-bold uppercase transition-all shadow-neo-sm cursor-pointer">
+                            <i id="sync-icon" class="fa-solid fa-arrows-rotate"></i>
+                            <span>Sync Now</span>
+                        </button>
+                        <div id="endpoint-status-badge" class="hidden sm:flex items-center gap-2 bg-gray-100 neo-border-sm px-3 py-1 text-xs font-bold uppercase">
+                            <span id="endpoint-dot" class="w-2.5 h-2.5 rounded-full bg-gray-400 inline-block"></span>
+                            <span id="endpoint-text">GAS Endpoint: Off</span>
+                        </div>
+                        <div class="relative">
+                            <button id="notification-bell" class="p-2 bg-white neo-border-sm shadow-neo-sm hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all relative">
+                                <i class="fa-solid fa-bell"></i>
+                                <span class="absolute top-0 right-0 w-2.5 h-2.5 bg-red-500 neo-border-sm"></span>
+                            </button>
+                        </div>
+                    </div>
+                </header>
+
+                <!-- Dynamic Page Container -->
+                <div id="main-scroll-container" class="flex-1 overflow-y-auto p-4 md:p-6 space-y-6">
+                    
+                    <!-- MODULE 1: DASHBOARD -->
+                    <section id="page-dashboard" class="page-section space-y-6">
+                        <!-- Top Banner / Headline -->
+                        <div class="bg-[#bfdbfe] p-6 neo-border shadow-neo flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                            <div>
+                                <h3 class="neo-title text-3xl font-black uppercase">Selamat Datang di LVCODEX SaaS!</h3>
+                                <p class="font-bold text-sm mt-1 text-slate-800">Sistem manajemen lisensi terpusat performa tinggi dengan proteksi HWID terkuat.</p>
+                            </div>
+                            <div class="flex gap-2">
+                                <button onclick="appState.navigateTo('generator')" class="px-4 py-2 bg-[#a3e635] hover:bg-lime-500 font-extrabold uppercase text-xs tracking-wider neo-border shadow-neo-sm neo-interactive">
+                                    <i class="fa-solid fa-plus-circle mr-1"></i> Generate License
+                                </button>
+                                <button onclick="appState.navigateTo('logs')" class="px-4 py-2 bg-white hover:bg-gray-100 font-extrabold uppercase text-xs tracking-wider neo-border shadow-neo-sm neo-interactive only-admin">
+                                    <i class="fa-solid fa-shield mr-1"></i> Audit Logs
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Statistics Grid -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                            <!-- Card 1 -->
+                            <div class="bg-white p-5 neo-border shadow-neo relative overflow-hidden">
+                                <div class="absolute right-4 top-4 text-4xl text-gray-200"><i class="fa-solid fa-key"></i></div>
+                                <p class="text-xs font-black text-gray-500 uppercase tracking-widest">Total Lisensi</p>
+                                <h4 id="stat-total-licenses" class="neo-title text-3xl font-extrabold mt-1">0</h4>
+                                <div class="mt-2 text-xs font-bold text-green-600"><i class="fa-solid fa-caret-up"></i> +12% Minggu Ini</div>
+                            </div>
+                            <!-- Card 2 -->
+                            <div class="bg-white p-5 neo-border shadow-neo relative overflow-hidden">
+                                <div class="absolute right-4 top-4 text-4xl text-gray-200"><i class="fa-solid fa-circle-check"></i></div>
+                                <p class="text-xs font-black text-gray-500 uppercase tracking-widest">Lisensi Aktif</p>
+                                <h4 id="stat-active-licenses" class="neo-title text-3xl font-extrabold mt-1">0</h4>
+                                <div class="mt-2 text-xs font-bold text-indigo-600">Utilization Rate</div>
+                            </div>
+                            <!-- Card 3 -->
+                            <div class="bg-white p-5 neo-border shadow-neo relative overflow-hidden">
+                                <div class="absolute right-4 top-4 text-4xl text-gray-200"><i class="fa-solid fa-hourglass-end"></i></div>
+                                <p class="text-xs font-black text-gray-500 uppercase tracking-widest">Lisensi Expired</p>
+                                <h4 id="stat-expired-licenses" class="neo-title text-3xl font-extrabold mt-1">0</h4>
+                                <div class="mt-2 text-xs font-bold text-red-500">Masa Percobaan Habis</div>
+                            </div>
+                            <!-- Card 4 -->
+                            <div class="bg-white p-5 neo-border shadow-neo relative overflow-hidden">
+                                <div class="absolute right-4 top-4 text-4xl text-gray-200"><i class="fa-solid fa-users"></i></div>
+                                <p class="text-xs font-black text-gray-500 uppercase tracking-widest">Total Resellers</p>
+                                <h4 id="stat-total-resellers" class="neo-title text-3xl font-extrabold mt-1">0</h4>
+                                <div class="mt-2 text-xs font-bold text-[#16a34a]"><i class="fa-solid fa-arrow-trend-up"></i> Kemitraan Aktif</div>
+                            </div>
+                        </div>
+
+                        <!-- Secondary Stats Grid -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                            <!-- Card 5 -->
+                            <div class="bg-white p-5 neo-border shadow-neo relative overflow-hidden">
+                                <p class="text-xs font-black text-gray-500 uppercase tracking-widest">Total Users / Device</p>
+                                <h4 id="stat-total-users" class="neo-title text-3xl font-extrabold mt-1">0</h4>
+                                <div class="mt-2 text-xs font-bold text-blue-600">Terdaftar di HWID Registry</div>
+                            </div>
+                            <!-- Card 6 -->
+                            <div class="bg-white p-5 neo-border shadow-neo relative overflow-hidden">
+                                <p class="text-xs font-black text-gray-500 uppercase tracking-widest">Online Users (Live)</p>
+                                <h4 id="stat-online-users" class="neo-title text-3xl font-extrabold mt-1 text-[#22c55e]">0</h4>
+                                <div class="mt-2 text-xs font-bold text-[#16a34a] flex items-center gap-1">
+                                    <span class="w-2 h-2 rounded-full bg-green-500 animate-ping inline-block"></span> Terkoneksi API
+                                </div>
+                            </div>
+                            <!-- Card 7 -->
+                            <div class="bg-white p-5 neo-border shadow-neo relative overflow-hidden">
+                                <p class="text-xs font-black text-gray-500 uppercase tracking-widest">System Health</p>
+                                <h4 class="neo-title text-3xl font-extrabold mt-1 text-green-500">99.9%</h4>
+                                <div class="mt-2 text-xs font-bold text-gray-600">Latency: 42ms</div>
+                            </div>
+                            <!-- Card 8 -->
+                            <div class="bg-white p-5 neo-border shadow-neo relative overflow-hidden">
+                                <p class="text-xs font-black text-gray-500 uppercase tracking-widest">Estimasi Revenue</p>
+                                <h4 id="stat-revenue" class="neo-title text-3xl font-extrabold mt-1">$0</h4>
+                                <div class="mt-2 text-xs font-bold text-[#16a34a]"><i class="fa-solid fa-wallet"></i> Gross Ledger Value</div>
+                            </div>
+                        </div>
+
+                        <!-- Main Dashboard Grid -->
+                        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                            <!-- Left Column (Activity & Latest Activations) -->
+                            <div class="lg:col-span-2 space-y-6">
+                                <!-- Activations Charts Area -->
+                                <div class="bg-white p-6 neo-border shadow-neo">
+                                    <div class="flex items-center justify-between mb-4 pb-4 border-b-2 border-black border-dashed">
+                                        <h4 class="neo-title text-xl font-black uppercase">Statistik Aktivasi Lisensi</h4>
+                                        <div class="flex gap-1">
+                                            <span class="bg-[#a3e635] px-2 py-1 text-[10px] font-extrabold uppercase border border-black shadow-neo-sm">Hari Ini</span>
+                                            <span class="bg-white px-2 py-1 text-[10px] font-extrabold uppercase border border-black shadow-neo-sm">Mingguan</span>
+                                        </div>
+                                    </div>
+                                    <!-- Bar Chart Simulation using standard HTML/CSS Neo Brutalist style -->
+                                    <div class="h-64 flex items-end justify-between gap-2 pt-6">
+                                        <div class="flex-1 flex flex-col items-center h-full justify-end">
+                                            <div class="bg-[#fbcfe8] neo-border-sm w-full h-[45%] hover:bg-[#f472b6] transition-all relative group shadow-neo-sm">
+                                                <div class="absolute -top-7 left-1/2 -translate-x-1/2 bg-black text-white text-[10px] px-1.5 py-0.5 opacity-0 group-hover:opacity-100 transition-opacity font-bold rounded">45</div>
+                                            </div>
+                                            <span class="text-[10px] font-bold uppercase mt-2">Sen</span>
+                                        </div>
+                                        <div class="flex-1 flex flex-col items-center h-full justify-end">
+                                            <div class="bg-[#fbcfe8] neo-border-sm w-full h-[65%] hover:bg-[#f472b6] transition-all relative group shadow-neo-sm">
+                                                <div class="absolute -top-7 left-1/2 -translate-x-1/2 bg-black text-white text-[10px] px-1.5 py-0.5 opacity-0 group-hover:opacity-100 transition-opacity font-bold rounded">65</div>
+                                            </div>
+                                            <span class="text-[10px] font-bold uppercase mt-2">Sel</span>
+                                        </div>
+                                        <div class="flex-1 flex flex-col items-center h-full justify-end">
+                                            <div class="bg-[#fbcfe8] neo-border-sm w-full h-[35%] hover:bg-[#f472b6] transition-all relative group shadow-neo-sm">
+                                                <div class="absolute -top-7 left-1/2 -translate-x-1/2 bg-black text-white text-[10px] px-1.5 py-0.5 opacity-0 group-hover:opacity-100 transition-opacity font-bold rounded">35</div>
+                                            </div>
+                                            <span class="text-[10px] font-bold uppercase mt-2">Rab</span>
+                                        </div>
+                                        <div class="flex-1 flex flex-col items-center h-full justify-end">
+                                            <div class="bg-[#a3e635] neo-border-sm w-full h-[95%] hover:bg-lime-500 transition-all relative group shadow-neo-sm">
+                                                <div class="absolute -top-7 left-1/2 -translate-x-1/2 bg-black text-white text-[10px] px-1.5 py-0.5 opacity-0 group-hover:opacity-100 transition-opacity font-bold rounded">95</div>
+                                            </div>
+                                            <span class="text-[10px] font-bold uppercase mt-2">Kam</span>
+                                        </div>
+                                        <div class="flex-1 flex flex-col items-center h-full justify-end">
+                                            <div class="bg-[#fbcfe8] neo-border-sm w-full h-[55%] hover:bg-[#f472b6] transition-all relative group shadow-neo-sm">
+                                                <div class="absolute -top-7 left-1/2 -translate-x-1/2 bg-black text-white text-[10px] px-1.5 py-0.5 opacity-0 group-hover:opacity-100 transition-opacity font-bold rounded">55</div>
+                                            </div>
+                                            <span class="text-[10px] font-bold uppercase mt-2">Jum</span>
+                                        </div>
+                                        <div class="flex-1 flex flex-col items-center h-full justify-end">
+                                            <div class="bg-[#fbcfe8] neo-border-sm w-full h-[80%] hover:bg-[#f472b6] transition-all relative group shadow-neo-sm">
+                                                <div class="absolute -top-7 left-1/2 -translate-x-1/2 bg-black text-white text-[10px] px-1.5 py-0.5 opacity-0 group-hover:opacity-100 transition-opacity font-bold rounded">80</div>
+                                            </div>
+                                            <span class="text-[10px] font-bold uppercase mt-2">Sab</span>
+                                        </div>
+                                        <div class="flex-1 flex flex-col items-center h-full justify-end">
+                                            <div class="bg-[#fbcfe8] neo-border-sm w-full h-[90%] hover:bg-[#f472b6] transition-all relative group shadow-neo-sm">
+                                                <div class="absolute -top-7 left-1/2 -translate-x-1/2 bg-black text-white text-[10px] px-1.5 py-0.5 opacity-0 group-hover:opacity-100 transition-opacity font-bold rounded">90</div>
+                                            </div>
+                                            <span class="text-[10px] font-bold uppercase mt-2">Min</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Recent Activations Table Widget -->
+                                <div class="bg-white p-6 neo-border shadow-neo">
+                                    <div class="flex items-center justify-between mb-4 pb-4 border-b-2 border-black border-dashed">
+                                        <h4 class="neo-title text-xl font-black uppercase">Aktivasi Client Terbaru</h4>
+                                        <button onclick="appState.navigateTo('licenses')" class="text-xs font-extrabold uppercase bg-black text-white px-3 py-1 hover:bg-[#a3e635] hover:text-black transition-all neo-border-sm">Lihat Semua</button>
+                                    </div>
+                                    <div class="overflow-x-auto">
+                                        <table class="w-full text-left border-collapse">
+                                            <thead>
+                                                <tr class="border-b-2 border-black bg-gray-50 text-xs font-black uppercase tracking-wider">
+                                                    <th class="p-3">Lisensi ID</th>
+                                                    <th class="p-3">Produk</th>
+                                                    <th class="p-3">Device / HWID</th>
+                                                    <th class="p-3">Waktu</th>
+                                                    <th class="p-3">Status</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="dashboard-recent-activations" class="text-sm font-semibold divide-y border-black">
+                                                <!-- Dynamic rows -->
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Right Column (Recent Activities & Product Shares) -->
+                            <div class="space-y-6">
+                                <!-- Notifications Widget -->
+                                <div class="bg-white p-6 neo-border shadow-neo">
+                                    <div class="mb-4 pb-2 border-b-2 border-black border-dashed">
+                                        <h4 class="neo-title text-xl font-black uppercase">Audit Keamanan Log</h4>
+                                    </div>
+                                    <div id="dashboard-security-audit" class="space-y-4">
+                                        <!-- Dynamic entries -->
+                                    </div>
+                                </div>
+
+                                <!-- Product Usage Widget -->
+                                <div class="bg-white p-6 neo-border shadow-neo">
+                                    <div class="mb-4 pb-2 border-b-2 border-black border-dashed">
+                                        <h4 class="neo-title text-xl font-black uppercase">Pangsa Penggunaan Produk</h4>
+                                    </div>
+                                    <div id="dashboard-product-usage" class="space-y-3">
+                                        <!-- Dynamic Progress bars -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- MODULE 2: LICENSE MANAGEMENT -->
+                    <section id="page-licenses" class="page-section hidden space-y-6">
+                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-white p-6 neo-border shadow-neo">
+                            <div>
+                                <h3 class="neo-title text-2xl font-black uppercase">Manajemen Kunci Lisensi</h3>
+                                <p class="text-xs font-bold text-gray-500 uppercase mt-1">Cari, suspend, perpanjang, dan hapus lisensi client Anda.</p>
+                            </div>
+                            <div>
+                                <button onclick="appState.navigateTo('generator')" class="px-5 py-3 bg-[#a3e635] font-extrabold uppercase text-sm neo-border shadow-neo-sm neo-interactive">
+                                    <i class="fa-solid fa-plus-circle mr-2"></i> Buat Kunci Baru
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Search & Filter Controls -->
+                        <div class="bg-white p-6 neo-border shadow-neo flex flex-col md:flex-row gap-4">
+                            <div class="flex-1 relative">
+                                <label class="block text-xs font-black uppercase tracking-wider mb-2">Cari Lisensi / Owner</label>
+                                <div class="relative">
+                                    <input type="text" id="license-search" class="w-full pl-10 pr-4 py-2.5 neo-border-sm focus:outline-none focus:ring-2 focus:ring-black font-semibold text-sm" placeholder="Cari lisensi key, ID, user, HWID...">
+                                    <div class="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400">
+                                        <i class="fa-solid fa-magnifying-glass"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="w-full md:w-48">
+                                <label class="block text-xs font-black uppercase tracking-wider mb-2">Filter Produk</label>
+                                <select id="license-filter-product" class="w-full px-3 py-2.5 neo-border-sm bg-white font-semibold text-sm focus:outline-none focus:ring-2 focus:ring-black">
+                                    <option value="ALL">Semua Produk</option>
+                                    <!-- Dynamic product options -->
+                                </select>
+                            </div>
+                            <div class="w-full md:w-48">
+                                <label class="block text-xs font-black uppercase tracking-wider mb-2">Filter Status</label>
+                                <select id="license-filter-status" class="w-full px-3 py-2.5 neo-border-sm bg-white font-semibold text-sm focus:outline-none focus:ring-2 focus:ring-black">
+                                    <option value="ALL">Semua Status</option>
+                                    <option value="Active">Active</option>
+                                    <option value="Suspended">Suspended</option>
+                                    <option value="Expired">Expired</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- License Main Table -->
+                        <div class="bg-white neo-border shadow-neo overflow-hidden">
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-left border-collapse">
+                                    <thead>
+                                        <tr class="border-b-2 border-black bg-gray-100 text-xs font-black uppercase tracking-wider">
+                                            <th class="p-4">Key / ID</th>
+                                            <th class="p-4">Produk</th>
+                                            <th class="p-4">Owner</th>
+                                            <th class="p-4">HWID / Device</th>
+                                            <th class="p-4">Status</th>
+                                            <th class="p-4">Berakhir Pada</th>
+                                            <th class="p-4">Dibuat Oleh</th>
+                                            <th class="p-4 text-center">Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="licenses-table-body" class="text-sm font-semibold divide-y border-black">
+                                        <!-- Dynamic entries -->
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- Pagination/Footer -->
+                            <div class="p-4 border-t-2 border-black bg-gray-50 flex flex-col sm:flex-row items-center justify-between gap-4">
+                                <div class="text-xs font-extrabold uppercase">
+                                    Menampilkan <span id="license-count-start">1</span> - <span id="license-count-end">10</span> Dari <span id="license-count-total">24</span> Lisensi
+                                </div>
+                                <div class="flex gap-2">
+                                    <button id="license-prev-page" class="px-3 py-1.5 bg-white border-2 border-black font-extrabold text-xs uppercase hover:bg-gray-100 active:translate-y-0.5">Prev</button>
+                                    <button id="license-next-page" class="px-3 py-1.5 bg-white border-2 border-black font-extrabold text-xs uppercase hover:bg-gray-100 active:translate-y-0.5">Next</button>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- MODULE 3: KEY GENERATOR -->
+                    <section id="page-generator" class="page-section hidden space-y-6">
+                        <div class="bg-white p-6 neo-border shadow-neo">
+                            <h3 class="neo-title text-2xl font-black uppercase">Wand Key Generator</h3>
+                            <p class="text-xs font-bold text-gray-500 uppercase mt-1">Hasilkan kunci lisensi secara tunggal atau massal (Bulk) secara instan.</p>
+                        </div>
+
+                        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                            <!-- Input Form -->
+                            <div class="bg-white p-6 neo-border shadow-neo space-y-6 lg:col-span-1">
+                                <h4 class="neo-title text-lg font-black uppercase pb-3 border-b-2 border-black border-dashed">Parameter Generator</h4>
+                                
+                                <form id="generator-form" class="space-y-4">
+                                    <div>
+                                        <label class="block text-xs font-black uppercase tracking-wider mb-2">Pilih Produk</label>
+                                        <select id="gen-product" required class="w-full px-3 py-2.5 neo-border-sm bg-white font-semibold text-sm focus:outline-none focus:ring-2 focus:ring-black">
+                                            <!-- Dynamic products filled by JS -->
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-black uppercase tracking-wider mb-2">Durasi Lisensi</label>
+                                        <select id="gen-duration" required class="w-full px-3 py-2.5 neo-border-sm bg-white font-semibold text-sm focus:outline-none focus:ring-2 focus:ring-black">
+                                            <option value="1">1 Hari (Trial)</option>
+                                            <option value="3">3 Hari</option>
+                                            <option value="7">7 Hari (Mingguan)</option>
+                                            <option value="14">14 Hari</option>
+                                            <option value="30">30 Hari (Bulanan)</option>
+                                            <option id="gen-opt-permanent" value="9999" class="only-admin">Permanen (Lifetime)</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-black uppercase tracking-wider mb-2">Jumlah Key (Bulk)</label>
+                                        <input type="number" id="gen-quantity" required min="1" max="100" value="1" class="w-full px-3 py-2.5 neo-border-sm bg-white font-semibold text-sm focus:outline-none focus:ring-2 focus:ring-black">
+                                        <span class="text-[10px] font-bold text-gray-400 uppercase mt-1 block">Maximum 100 Keys sekali proses.</span>
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-black uppercase tracking-wider mb-2">Ditugaskan Kepada / Owner</label>
+                                        <input type="text" id="gen-owner" class="w-full px-3 py-2.5 neo-border-sm bg-white font-semibold text-sm focus:outline-none focus:ring-2 focus:ring-black placeholder-gray-400" placeholder="Kosongkan jika dijual via reseller">
+                                    </div>
+                                    <div class="pt-4">
+                                        <button type="submit" class="w-full py-4 bg-[#a3e635] text-black neo-border font-black text-sm tracking-wider uppercase shadow-neo neo-interactive">
+                                            <i class="fa-solid fa-wand-magic-sparkles mr-2"></i> GENERATE SEKARANG
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <!-- Generated Results Display -->
+                            <div class="bg-white p-6 neo-border shadow-neo lg:col-span-2 flex flex-col min-h-[450px]">
+                                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-3 border-b-2 border-black border-dashed mb-4">
+                                    <h4 class="neo-title text-lg font-black uppercase">Hasil Generate Kunci</h4>
+                                    <div id="gen-actions-wrapper" class="hidden flex gap-2">
+                                        <button id="btn-copy-all-gen" class="px-3 py-1.5 bg-[#60a5fa] font-extrabold text-xs uppercase neo-border-sm shadow-neo-sm neo-interactive">
+                                            <i class="fa-solid fa-copy mr-1"></i> Salin Semua
+                                        </button>
+                                        <button id="btn-export-gen" class="px-3 py-1.5 bg-white font-extrabold text-xs uppercase neo-border-sm shadow-neo-sm neo-interactive">
+                                            <i class="fa-solid fa-file-excel mr-1"></i> Export TXT
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div id="gen-empty-state" class="flex-1 flex flex-col items-center justify-center text-center p-8">
+                                    <div class="w-20 h-20 bg-gray-100 neo-border border-dashed flex items-center justify-center text-3xl text-gray-400 mb-4">
+                                        <i class="fa-solid fa-wand-magic"></i>
+                                    </div>
+                                    <h5 class="font-extrabold uppercase text-sm">Belum Ada Kunci Tergenerate</h5>
+                                    <p class="text-xs text-gray-400 uppercase mt-1 max-w-sm">Silakan tentukan parameter produk, durasi, dan jumlah kunci di panel kiri untuk memulai proses generation.</p>
+                                </div>
+
+                                <div id="gen-result-container" class="hidden flex-1 flex flex-col">
+                                    <textarea id="gen-output-text" readonly class="flex-1 w-full p-4 font-mono text-sm neo-border-sm bg-gray-50 focus:outline-none mb-4 resize-none h-64"></textarea>
+                                    <div class="p-4 bg-[#fef08a] neo-border-sm shadow-neo-sm">
+                                        <p class="text-xs font-bold uppercase flex items-center gap-2">
+                                            <i class="fa-solid fa-triangle-exclamation text-base"></i>
+                                            Penting: Simpan kunci ini segera. Lisensi ini sudah langsung terdaftar di database spreadsheet system.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- MODULE 4: RESELLER MANAGEMENT -->
+                    <section id="page-resellers" class="page-section hidden space-y-6 only-admin">
+                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-white p-6 neo-border shadow-neo">
+                            <div>
+                                <h3 class="neo-title text-2xl font-black uppercase">Sistem Kemitraan Reseller</h3>
+                                <p class="text-xs font-bold text-gray-500 uppercase mt-1">Tambahkan mitra reseller baru dan kelola kuota / balance kredit lisensi mereka.</p>
+                            </div>
+                            <div>
+                                <button onclick="resellerModal.openCreate()" class="px-5 py-3 bg-[#a3e635] font-extrabold uppercase text-sm neo-border shadow-neo-sm neo-interactive">
+                                    <i class="fa-solid fa-user-plus mr-2"></i> Tambah Reseller
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Search & Analytics Top bar -->
+                        <div class="bg-white p-6 neo-border shadow-neo flex flex-col md:flex-row gap-4">
+                            <div class="flex-1 relative">
+                                <label class="block text-xs font-black uppercase tracking-wider mb-2">Cari Reseller</label>
+                                <div class="relative">
+                                    <input type="text" id="reseller-search" class="w-full pl-10 pr-4 py-2.5 neo-border-sm focus:outline-none focus:ring-2 focus:ring-black font-semibold text-sm" placeholder="Cari nama, email, ID reseller...">
+                                    <div class="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400">
+                                        <i class="fa-solid fa-magnifying-glass"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Reseller List Table -->
+                        <div class="bg-white neo-border shadow-neo overflow-hidden">
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-left border-collapse">
+                                    <thead>
+                                        <tr class="border-b-2 border-black bg-gray-100 text-xs font-black uppercase tracking-wider">
+                                            <th class="p-4">Reseller ID</th>
+                                            <th class="p-4">Username / Email</th>
+                                            <th class="p-4">Kredit Saldo</th>
+                                            <th class="p-4">Key Generated</th>
+                                            <th class="p-4">Key Active</th>
+                                            <th class="p-4">Tgl Registrasi</th>
+                                            <th class="p-4">Status</th>
+                                            <th class="p-4 text-center">Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="reseller-table-body" class="text-sm font-semibold divide-y border-black">
+                                        <!-- Dynamic entries -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- MODULE 5: USER MANAGEMENT -->
+                    <section id="page-users" class="page-section hidden space-y-6">
+                        <div class="bg-white p-6 neo-border shadow-neo">
+                            <h3 class="neo-title text-2xl font-black uppercase">Daftar Aktif Client / Users</h3>
+                            <p class="text-xs font-bold text-gray-500 uppercase mt-1">Pantau client terdaftar, reset HWID yang terkunci, dan moderasi akses client.</p>
+                        </div>
+
+                        <!-- Control Dashboard -->
+                        <div class="bg-white p-6 neo-border shadow-neo">
+                            <div class="relative">
+                                <label class="block text-xs font-black uppercase tracking-wider mb-2">Cari Client Terdaftar</label>
+                                <div class="relative">
+                                    <input type="text" id="users-search" class="w-full pl-10 pr-4 py-2.5 neo-border-sm focus:outline-none focus:ring-2 focus:ring-black font-semibold text-sm" placeholder="Cari nama user, email, HWID, tipe produk...">
+                                    <div class="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400">
+                                        <i class="fa-solid fa-magnifying-glass"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- User Table -->
+                        <div class="bg-white neo-border shadow-neo overflow-hidden">
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-left border-collapse">
+                                    <thead>
+                                        <tr class="border-b-2 border-black bg-gray-100 text-xs font-black uppercase tracking-wider">
+                                            <th class="p-4">Username / Email</th>
+                                            <th class="p-4">Lisensi Berjalan</th>
+                                            <th class="p-4">Tipe Produk</th>
+                                            <th class="p-4">HWID Perangkat</th>
+                                            <th class="p-4">Aktivitas Terakhir</th>
+                                            <th class="p-4">Status</th>
+                                            <th class="p-4 text-center">Aksi Keamanan</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="users-table-body" class="text-sm font-semibold divide-y border-black">
+                                        <!-- Dynamic entries -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- MODULE 6: PRODUCT MANAGEMENT -->
+                    <section id="page-products" class="page-section hidden space-y-6 only-admin">
+                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-white p-6 neo-border shadow-neo">
+                            <div>
+                                <h3 class="neo-title text-2xl font-black uppercase">Manajemen Produk Software</h3>
+                                <p class="text-xs font-bold text-gray-500 uppercase mt-1">Daftarkan software Anda yang terintegrasi dengan SDK Key API LvCodex.</p>
+                            </div>
+                            <div>
+                                <button onclick="productModal.openCreate()" class="px-5 py-3 bg-[#a3e635] font-extrabold uppercase text-sm neo-border shadow-neo-sm neo-interactive">
+                                    <i class="fa-solid fa-plus-circle mr-2"></i> Daftarkan Produk
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Product Grid -->
+                        <div id="product-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            <!-- Dynamic Product cards generated by JS -->
+                        </div>
+                    </section>
+
+                    <!-- MODULE 7: DEVICE & HWID MANAGEMENT -->
+                    <section id="page-devices" class="page-section hidden space-y-6">
+                        <div class="bg-white p-6 neo-border shadow-neo">
+                            <h3 class="neo-title text-2xl font-black uppercase">Pusat Validasi HWID Perangkat</h3>
+                            <p class="text-xs font-bold text-gray-500 uppercase mt-1">Histori login HWID, log anti-debugger, pembatasan multi-device, dan blacklist HWID.</p>
+                        </div>
+
+                        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                            <!-- Left Column (HWID Info) -->
+                            <div class="lg:col-span-1 space-y-6">
+                                <div class="bg-white p-6 neo-border shadow-neo space-y-4">
+                                    <h4 class="neo-title text-lg font-black uppercase pb-2 border-b-2 border-black border-dashed">Blacklist HWID Manual</h4>
+                                    <form id="form-blacklist-hwid" class="space-y-4">
+                                        <div>
+                                            <label class="block text-xs font-black uppercase tracking-wider mb-2">Hardware ID (HWID)</label>
+                                            <input type="text" id="blacklist-hwid-val" required class="w-full px-3 py-2.5 neo-border-sm bg-white font-semibold text-sm focus:outline-none focus:ring-2 focus:ring-black" placeholder="F83C-72A0-99E1-BB24">
+                                        </div>
+                                        <div>
+                                            <label class="block text-xs font-black uppercase tracking-wider mb-2">Alasan Pemblokiran</label>
+                                            <input type="text" id="blacklist-hwid-reason" required class="w-full px-3 py-2.5 neo-border-sm bg-white font-semibold text-sm focus:outline-none focus:ring-2 focus:ring-black" placeholder="Terdeteksi Wireshark / Reversing">
+                                        </div>
+                                        <button type="submit" class="w-full py-3 bg-red-400 text-black font-black text-xs uppercase neo-border shadow-neo-sm neo-interactive">
+                                            <i class="fa-solid fa-ban mr-1"></i> Blacklist Perangkat
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+
+                            <!-- Right Column (Device list/log) -->
+                            <div class="lg:col-span-2 space-y-6">
+                                <div class="bg-white p-6 neo-border shadow-neo">
+                                    <h4 class="neo-title text-xl font-black uppercase mb-4 pb-2 border-b-2 border-black border-dashed">Daftar HWID Terblokir</h4>
+                                    <div class="overflow-x-auto">
+                                        <table class="w-full text-left border-collapse">
+                                            <thead>
+                                                <tr class="border-b-2 border-black bg-gray-50 text-xs font-black uppercase tracking-wider">
+                                                    <th class="p-3">HWID</th>
+                                                    <th class="p-3">Alasan Blacklist</th>
+                                                    <th class="p-3">Tanggal Block</th>
+                                                    <th class="p-3 text-center">Tindakan</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="blacklist-table-body" class="text-sm font-semibold divide-y border-black">
+                                                <!-- Dynamic entries -->
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- MODULE 8: ANALYTICS -->
+                    <section id="page-analytics" class="page-section hidden space-y-6">
+                        <div class="bg-white p-6 neo-border shadow-neo">
+                            <h3 class="neo-title text-2xl font-black uppercase">Pusat Analitik & Keuangan</h3>
+                            <p class="text-xs font-bold text-gray-500 uppercase mt-1">Laporan grafik volume pertumbuhan lisensi, revenue global, dan performa reseller.</p>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <!-- Revenue Trend Chart Simulation -->
+                            <div class="bg-white p-6 neo-border shadow-neo">
+                                <h4 class="neo-title text-lg font-black uppercase mb-4 pb-2 border-b-2 border-black border-dashed">Revenue bulanan (USD)</h4>
+                                <div class="h-64 flex items-end justify-between gap-3 pt-6">
+                                    <div class="flex-1 flex flex-col items-center h-full justify-end">
+                                        <div class="bg-lime-400 neo-border-sm w-full h-[30%] shadow-neo-sm relative group">
+                                            <div class="absolute -top-7 left-1/2 -translate-x-1/2 bg-black text-white text-[10px] px-1.5 py-0.5 opacity-0 group-hover:opacity-100 transition-opacity font-bold rounded">$12K</div>
+                                        </div>
+                                        <span class="text-[10px] font-bold mt-2">Jan</span>
+                                    </div>
+                                    <div class="flex-1 flex flex-col items-center h-full justify-end">
+                                        <div class="bg-lime-400 neo-border-sm w-full h-[45%] shadow-neo-sm relative group">
+                                            <div class="absolute -top-7 left-1/2 -translate-x-1/2 bg-black text-white text-[10px] px-1.5 py-0.5 opacity-0 group-hover:opacity-100 transition-opacity font-bold rounded">$18K</div>
+                                        </div>
+                                        <span class="text-[10px] font-bold mt-2">Feb</span>
+                                    </div>
+                                    <div class="flex-1 flex flex-col items-center h-full justify-end">
+                                        <div class="bg-lime-400 neo-border-sm w-full h-[65%] shadow-neo-sm relative group">
+                                            <div class="absolute -top-7 left-1/2 -translate-x-1/2 bg-black text-white text-[10px] px-1.5 py-0.5 opacity-0 group-hover:opacity-100 transition-opacity font-bold rounded">$28K</div>
+                                        </div>
+                                        <span class="text-[10px] font-bold mt-2">Mar</span>
+                                    </div>
+                                    <div class="flex-1 flex flex-col items-center h-full justify-end">
+                                        <div class="bg-lime-400 neo-border-sm w-full h-[85%] shadow-neo-sm relative group">
+                                            <div class="absolute -top-7 left-1/2 -translate-x-1/2 bg-black text-white text-[10px] px-1.5 py-0.5 opacity-0 group-hover:opacity-100 transition-opacity font-bold rounded">$39K</div>
+                                        </div>
+                                        <span class="text-[10px] font-bold mt-2">Apr</span>
+                                    </div>
+                                    <div class="flex-1 flex flex-col items-center h-full justify-end">
+                                        <div class="bg-[#a3e635] neo-border-sm w-full h-[95%] shadow-neo-lg relative group">
+                                            <div class="absolute -top-7 left-1/2 -translate-x-1/2 bg-black text-white text-[10px] px-1.5 py-0.5 opacity-0 group-hover:opacity-100 transition-opacity font-bold rounded">$48K</div>
+                                        </div>
+                                        <span class="text-[10px] font-bold mt-2">Mei (Live)</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Growth Chart -->
+                            <div class="bg-white p-6 neo-border shadow-neo">
+                                <h4 class="neo-title text-lg font-black uppercase mb-4 pb-2 border-b-2 border-black border-dashed">Pertumbuhan Lisensi Baru</h4>
+                                <div class="h-64 flex items-end justify-between gap-3 pt-6">
+                                    <div class="flex-1 flex flex-col items-center h-full justify-end">
+                                        <div class="bg-blue-400 neo-border-sm w-full h-[40%] shadow-neo-sm relative group"></div>
+                                        <span class="text-[10px] font-bold mt-2">M-1</span>
+                                    </div>
+                                    <div class="flex-1 flex flex-col items-center h-full justify-end">
+                                        <div class="bg-blue-400 neo-border-sm w-full h-[55%] shadow-neo-sm relative group"></div>
+                                        <span class="text-[10px] font-bold mt-2">M-2</span>
+                                    </div>
+                                    <div class="flex-1 flex flex-col items-center h-full justify-end">
+                                        <div class="bg-blue-400 neo-border-sm w-full h-[70%] shadow-neo-sm relative group"></div>
+                                        <span class="text-[10px] font-bold mt-2">M-3</span>
+                                    </div>
+                                    <div class="flex-1 flex flex-col items-center h-full justify-end">
+                                        <div class="bg-blue-400 neo-border-sm w-full h-[85%] shadow-neo-sm relative group"></div>
+                                        <span class="text-[10px] font-bold mt-2">M-4</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- MODULE 9: SECURITY CENTER -->
+                    <section id="page-security" class="page-section hidden space-y-6 only-admin">
+                        <div class="bg-white p-6 neo-border shadow-neo">
+                            <h3 class="neo-title text-2xl font-black uppercase">Security & Risk Center</h3>
+                            <p class="text-xs font-bold text-gray-500 uppercase mt-1">Daftar kegagalan otentikasi login, aktivitas debugger yang berhasil dicegah, dan log insiden.</p>
+                        </div>
+
+                        <div class="bg-white p-6 neo-border shadow-neo">
+                            <h4 class="neo-title text-xl font-black uppercase mb-4 pb-2 border-b-2 border-black border-dashed">Daftar Ancaman Sistem Terdeteksi</h4>
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-left border-collapse">
+                                    <thead>
+                                        <tr class="border-b-2 border-black bg-gray-50 text-xs font-black uppercase tracking-wider">
+                                            <th class="p-3">Waktu</th>
+                                            <th class="p-3">IP Address / HWID</th>
+                                            <th class="p-3">Kejadian Keamanan</th>
+                                            <th class="p-3">Tingkat Risiko</th>
+                                            <th class="p-3 text-center font-bold">Status Mitigasi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="security-threats-table" class="text-sm font-semibold divide-y border-black">
+                                        <!-- Dynamic entries -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- MODULE 10: SYSTEM LOGS -->
+                    <section id="page-logs" class="page-section hidden space-y-6 only-admin">
+                        <div class="bg-white p-6 neo-border shadow-neo">
+                            <h3 class="neo-title text-2xl font-black uppercase">Logs Histori Aktivitas</h3>
+                            <p class="text-xs font-bold text-gray-500 uppercase mt-1">Histori penuh aktivitas sistem dari create, update, delete kunci lisensi, produk, dan reseller.</p>
+                        </div>
+
+                        <div class="bg-white p-6 neo-border shadow-neo">
+                            <div class="flex flex-col sm:flex-row items-center justify-between gap-4 mb-4 pb-2 border-b-2 border-black border-dashed">
+                                <h4 class="neo-title text-xl font-black uppercase">Pusat Histori Audit Trail</h4>
+                                <button id="btn-clear-logs" class="px-3 py-1.5 bg-red-400 hover:bg-red-500 text-black font-black text-xs uppercase neo-border shadow-neo-sm neo-interactive">
+                                    Bersihkan Logs
+                                </button>
+                            </div>
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-left border-collapse">
+                                    <thead>
+                                        <tr class="border-b-2 border-black bg-gray-50 text-xs font-black uppercase tracking-wider">
+                                            <th class="p-3">Timestamp</th>
+                                            <th class="p-3">Aktor</th>
+                                            <th class="p-3">Modul</th>
+                                            <th class="p-3">Aksi</th>
+                                            <th class="p-3">Detail Logs</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="system-audit-logs" class="text-sm font-semibold divide-y border-black">
+                                        <!-- Dynamic entries -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- MODULE 11: SETTINGS -->
+                    <section id="page-settings" class="page-section hidden space-y-6">
+                        <div class="bg-white p-6 neo-border shadow-neo">
+                            <h3 class="neo-title text-2xl font-black uppercase">Konfigurasi Pengaturan</h3>
+                            <p class="text-xs font-bold text-gray-500 uppercase mt-1">Konfigurasi sistem, integrasi Google API key, dan template lisensi.</p>
+                        </div>
+
+                        <div class="bg-white neo-border shadow-neo overflow-hidden">
+                            <!-- Tabs selector inside settings -->
+                            <div class="flex border-b-4 border-black bg-gray-100">
+                                <button data-set-tab="api" class="settings-tab-btn flex-1 py-3 font-extrabold uppercase text-xs sm:text-sm border-r-2 border-black bg-[#a3e635] text-black">
+                                    API & GAS Integration
+                                </button>
+                                <button data-set-tab="general" class="settings-tab-btn flex-1 py-3 font-extrabold uppercase text-xs sm:text-sm border-r-2 border-black">
+                                    Branding & System
+                                </button>
+                                <button data-set-tab="security" class="settings-tab-btn flex-1 py-3 font-extrabold uppercase text-xs sm:text-sm">
+                                    Security Rules
+                                </button>
+                            </div>
+
+                            <div class="p-6">
+                                <!-- Tab 1: API Configuration -->
+                                <div id="setting-tab-content-api" class="settings-tab-pane space-y-6">
+                                    <div>
+                                        <h4 class="neo-title text-lg font-black uppercase">Google Apps Script Web App Endpoint</h4>
+                                        <p class="text-xs font-bold text-gray-500 mt-1 uppercase">Hubungkan visual panel ini ke script backend gas yang berada di Google Drive Anda.</p>
+                                    </div>
+                                    
+                                    <div class="space-y-4 max-w-2xl">
+                                        <div>
+                                            <label class="block text-xs font-black uppercase tracking-wider mb-2">Google Apps Script Web App URL</label>
+                                            <input type="url" id="settings-gas-url" class="w-full px-3 py-2.5 neo-border-sm bg-white font-semibold text-sm focus:outline-none focus:ring-2 focus:ring-black placeholder-gray-400" placeholder="https://script.google.com/macros/s/AKfycb.../exec">
+                                            <p class="text-[10px] font-bold text-gray-400 mt-1 uppercase">Sistem akan melakukan callback REST API POST ke URL di atas untuk integrasi penuh.</p>
+                                        </div>
+                                        <div>
+                                            <label class="block text-xs font-black uppercase tracking-wider mb-2">API Security Token / Signature Key</label>
+                                            <input type="text" id="settings-gas-token" class="w-full px-3 py-2.5 neo-border-sm bg-white font-semibold text-sm focus:outline-none focus:ring-2 focus:ring-black placeholder-gray-400" placeholder="API_SECRET_KEY_LVCODEX">
+                                        </div>
+                                        <div class="p-4 bg-[#fef08a] neo-border-sm flex items-start gap-3">
+                                            <i class="fa-solid fa-circle-info text-lg mt-0.5"></i>
+                                            <div class="text-xs font-bold uppercase">
+                                                <span>Cara Deploy:</span>
+                                                <ol class="list-decimal list-inside mt-1 font-semibold space-y-1">
+                                                    <li>Buka Google Spreadsheet & Apps Script Editor.</li>
+                                                    <li>Terapkan Script Web App dengan parameter "Anyone" can access.</li>
+                                                    <li>Masukkan Web App URL di kolom atas, lalu klik Simpan.</li>
+                                                </ol>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Tab 2: General & Branding -->
+                                <div id="setting-tab-content-general" class="settings-tab-pane hidden space-y-6">
+                                    <div>
+                                        <h4 class="neo-title text-lg font-black uppercase">Pengaturan Branding Panel</h4>
+                                        <p class="text-xs font-bold text-gray-500 mt-1 uppercase">Sesuaikan nama brand dan setelan global dari panel Anda.</p>
+                                    </div>
+                                    <div class="space-y-4 max-w-2xl">
+                                        <div>
+                                            <label class="block text-xs font-black uppercase tracking-wider mb-2">Nama Panel SaaS</label>
+                                            <input type="text" id="settings-saas-name" value="LVCODEX Key Manager" class="w-full px-3 py-2.5 neo-border-sm bg-white font-semibold text-sm focus:outline-none focus:ring-2 focus:ring-black">
+                                        </div>
+                                        <div>
+                                            <label class="block text-xs font-black uppercase tracking-wider mb-2">Custom Prefix Serial Key</label>
+                                            <input type="text" id="settings-saas-prefix" value="LVC" class="w-full px-3 py-2.5 neo-border-sm bg-white font-semibold text-sm focus:outline-none focus:ring-2 focus:ring-black">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Tab 3: Security Rules -->
+                                <div id="setting-tab-content-security" class="settings-tab-pane hidden space-y-6">
+                                    <div>
+                                        <h4 class="neo-title text-lg font-black uppercase">Sistem Keamanan Hardware ID (HWID)</h4>
+                                        <p class="text-xs font-bold text-gray-500 mt-1 uppercase">Konfigurasi batas ketat keamanan anti exploit lisensi client.</p>
+                                    </div>
+                                    <div class="space-y-4 max-w-2xl">
+                                        <div>
+                                            <label class="flex items-center gap-2 cursor-pointer select-none">
+                                                <input type="checkbox" id="settings-strict-hwid" checked class="w-5 h-5 neo-border-sm rounded-none accent-black cursor-pointer">
+                                                <span class="text-xs font-extrabold uppercase">Terapkan Kunci HWID Ketat (Satu Lisensi Hanya 1 PC)</span>
+                                            </label>
+                                        </div>
+                                        <div>
+                                            <label class="block text-xs font-black uppercase tracking-wider mb-2">Batas Reset HWID Per Lisensi (Tiap Bulan)</label>
+                                            <input type="number" id="settings-max-reset" value="3" class="w-full px-3 py-2.5 neo-border-sm bg-white font-semibold text-sm focus:outline-none focus:ring-2 focus:ring-black">
+                                        </div>
+                                        <div>
+                                            <label class="flex items-center gap-2 cursor-pointer select-none">
+                                                <input type="checkbox" id="settings-anti-debug" checked class="w-5 h-5 neo-border-sm rounded-none accent-black cursor-pointer">
+                                                <span class="text-xs font-extrabold uppercase">Aktifkan Proteksi Auto-Ban Jika Terdeteksi Debugger</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="mt-8 pt-6 border-t-2 border-black border-dashed flex justify-end">
+                                    <button id="btn-save-settings" class="px-6 py-3 bg-[#a3e635] text-black font-black text-sm uppercase neo-border shadow-neo-sm neo-interactive">
+                                        Simpan Konfigurasi
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                </div>
+            </main>
+        </div>
+
+    </div>
+
+    <!-- MODAL POPUP SYSTEM -->
+    <!-- Reseller Modal Form -->
+    <div id="reseller-modal" class="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4 hidden">
+        <div class="w-full max-w-md bg-white neo-border shadow-neo-lg p-6 relative">
+            <button onclick="resellerModal.close()" class="absolute top-4 right-4 bg-red-400 neo-border-sm w-8 h-8 flex items-center justify-center font-bold">X</button>
+            <h4 id="reseller-modal-title" class="neo-title text-xl font-black uppercase mb-4 pb-2 border-b-2 border-black border-dashed">Tambah Reseller Baru</h4>
+            
+            <form id="reseller-form" class="space-y-4">
+                <input type="hidden" id="reseller-form-id">
+                <div>
+                    <label class="block text-xs font-black uppercase tracking-wider mb-2">Username</label>
+                    <input type="text" id="reseller-form-username" required class="w-full px-3 py-2 neo-border-sm focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-black uppercase tracking-wider mb-2">Email</label>
+                    <input type="email" id="reseller-form-email" required class="w-full px-3 py-2 neo-border-sm focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-black uppercase tracking-wider mb-2">Kredit Balance ($)</label>
+                    <input type="number" id="reseller-form-balance" required min="0" value="0" class="w-full px-3 py-2 neo-border-sm focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-black uppercase tracking-wider mb-2">Status Akun</label>
+                    <select id="reseller-form-status" class="w-full px-3 py-2 neo-border-sm bg-white focus:outline-none">
+                        <option value="Active">Active</option>
+                        <option value="Suspended">Suspended</option>
+                    </select>
+                </div>
+                <div class="pt-4 flex justify-end gap-2">
+                    <button type="button" onclick="resellerModal.close()" class="px-4 py-2 bg-white border-2 border-black font-bold text-xs uppercase">Batal</button>
+                    <button type="submit" class="px-4 py-2 bg-[#a3e635] neo-border-sm font-bold text-xs uppercase shadow-neo-sm">Simpan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Product Modal Form -->
+    <div id="product-modal" class="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4 hidden">
+        <div class="w-full max-w-md bg-white neo-border shadow-neo-lg p-6 relative">
+            <button onclick="productModal.close()" class="absolute top-4 right-4 bg-red-400 neo-border-sm w-8 h-8 flex items-center justify-center font-bold">X</button>
+            <h4 id="product-modal-title" class="neo-title text-xl font-black uppercase mb-4 pb-2 border-b-2 border-black border-dashed">Daftarkan Produk Baru</h4>
+            
+            <form id="product-form" class="space-y-4">
+                <input type="hidden" id="product-form-id">
+                <div>
+                    <label class="block text-xs font-black uppercase tracking-wider mb-2">Nama Produk</label>
+                    <input type="text" id="product-form-name" required class="w-full px-3 py-2 neo-border-sm focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-black uppercase tracking-wider mb-2">Versi</label>
+                    <input type="text" id="product-form-version" required placeholder="1.0.0" class="w-full px-3 py-2 neo-border-sm focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-black uppercase tracking-wider mb-2">Download URL</label>
+                    <input type="url" id="product-form-download" placeholder="https://..." class="w-full px-3 py-2 neo-border-sm focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-black uppercase tracking-wider mb-2">Deskripsi Singkat</label>
+                    <textarea id="product-form-desc" class="w-full px-3 py-2 neo-border-sm focus:outline-none h-20 resize-none"></textarea>
+                </div>
+                <div class="pt-4 flex justify-end gap-2">
+                    <button type="button" onclick="productModal.close()" class="px-4 py-2 bg-white border-2 border-black font-bold text-xs uppercase">Batal</button>
+                    <button type="submit" class="px-4 py-2 bg-[#a3e635] neo-border-sm font-bold text-xs uppercase shadow-neo-sm">Simpan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MAIN APP CONTROLLER & STATE ENGINE -->
+    <script>
+        // Global variables provided by Canvas environment
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'lvcodex-key-manager-gas';
+
+        // Core Application State & Local Database Engine
+        const appState = {
+            currentUser: null,
+            activeTab: 'dashboard',
+            isSyncing: false,
+            
+            // Local fallback data storage (Simulates Google Spreadsheet Data Model)
+            database: {
+                licenses: [
+                    { id: 'LIC-001', key: 'LVC-9X82-B293-ZZ10-9941', product: 'Cheat Engine Premium SDK', owner: 'Reza Malindo', hwid: '8F2C-90AA-65EB-B2C1', status: 'Active', duration: 30, createdBy: 'admin', createdDate: '2026-05-15 10:20', deviceName: 'Legion-PC' },
+                    { id: 'LIC-002', key: 'LVC-1290-AA24-BB90-8801', product: 'LvCodex VIP Bypass', owner: 'Rian Dev', hwid: 'F33A-12EA-88F1-44DC', status: 'Active', duration: 7, createdBy: 'Reseller_A', createdDate: '2026-05-20 14:35', deviceName: 'MacBookPro-Rian' },
+                    { id: 'LIC-003', key: 'LVC-9941-CC20-0019-9182', product: 'LvCodex VIP Bypass', owner: 'Ahmad Kusuma', hwid: '809A-CFED-029A-EE10', status: 'Suspended', duration: 30, createdBy: 'admin', createdDate: '2026-05-10 11:05', deviceName: 'DESKTOP-9AH18' },
+                    { id: 'LIC-004', key: 'LVC-2283-F77D-8AA3-3110', product: 'Apex Legend Internal Script', owner: 'Galang Adi', hwid: 'NONE', status: 'Active', duration: 1, createdBy: 'Reseller_B', createdDate: '2026-05-30 08:15', deviceName: 'NONE' },
+                    { id: 'LIC-005', key: 'LVC-8839-DDC0-99F1-2291', product: 'Cheat Engine Premium SDK', owner: 'Yosep King', hwid: '1192-AACD-EE82-FFFF', status: 'Expired', duration: 3, createdBy: 'admin', createdDate: '2026-05-01 16:40', deviceName: 'ROG-Strix' }
+                ],
+                resellers: [
+                    { id: 'RSL-101', username: 'Reseller_A', email: 'partnera@gmail.com', balance: 520, generatedKeys: 28, activeKeys: 18, regDate: '2026-01-10', status: 'Active' },
+                    { id: 'RSL-102', username: 'Reseller_B', email: 'partnerb@gmail.com', balance: 140, generatedKeys: 12, activeKeys: 6, regDate: '2026-02-18', status: 'Active' },
+                    { id: 'RSL-103', username: 'Reseller_C', email: 'suspendedreseller@gmail.com', balance: 0, generatedKeys: 45, activeKeys: 0, regDate: '2025-11-22', status: 'Suspended' }
+                ],
+                products: [
+                    { id: 'PRD-01', name: 'Cheat Engine Premium SDK', version: '2.4.1', download: 'https://lvcodex.com/downloads/sdk', desc: 'SDK verifikasi key dynamic berkecepatan tinggi dengan wrapper C++ / C#', status: 'Active' },
+                    { id: 'PRD-02', name: 'LvCodex VIP Bypass', version: '4.8.0', download: 'https://lvcodex.com/downloads/bypass', desc: 'Bypass kernel anti-cheat ring 0 dengan enkripsi proteksi memory khusus', status: 'Active' },
+                    { id: 'PRD-03', name: 'Apex Legend Internal Script', version: '1.2.9', download: 'https://lvcodex.com/downloads/apex', desc: 'Modul kustomisasi memory dengan visual overlay DX11 premium', status: 'Active' }
+                ],
+                blacklistHWID: [
+                    { hwid: 'F83C-72A0-99E1-BB24', reason: 'Reverse engineering payload pattern detected', date: '2026-05-28 19:40' },
+                    { hwid: '112A-18A3-CFEF-009A', reason: 'Suspicious DLL Injection attempts via Anti-Debugger module', date: '2026-05-29 23:15' }
+                ],
+                threats: [
+                    { time: '2026-05-30 11:24', target: '8F2C-90AA-65EB-B2C1', event: 'OllyDbg/x64dbg detection trigger', severity: 'Critical', mitigation: 'HWID Suspended / Blocked' },
+                    { time: '2026-05-30 08:15', target: '182.16.89.2', event: 'Violent Brute force attempt on Login Web API', severity: 'High', mitigation: 'IP Temp Blocked (30m)' }
+                ],
+                auditLogs: [
+                    { timestamp: '2026-05-30 14:10', actor: 'admin', module: 'Auth', action: 'Login Success', detail: 'Berhasil login ke panel administrator utama.' },
+                    { timestamp: '2026-05-30 13:45', actor: 'Reseller_A', module: 'License', action: 'Generate Key', detail: 'Hasilkan lisensi 7 Hari untuk produk LvCodex VIP Bypass.' },
+                    { timestamp: '2026-05-30 11:15', actor: 'admin', module: 'HWID', action: 'Reset HWID', detail: 'Reset HWID lisensi LIC-001 atas permintaan client.' }
+                ],
+                settings: {
+                    gasUrl: 'https://script.google.com/macros/s/AKfycbwE9H0h0u587_Yr_eXpEIyERfz65MdGr1g_6nALmIV-ADQFCuspwQip-BP3i1WSchcCDQ/exec',
+                    gasToken: 'API_SECRET_KEY_LVCODEX',
+                    saasName: 'LVCODEX Key Manager',
+                    saasPrefix: 'LVC',
+                    strictHwid: true,
+                    maxReset: 3,
+                    antiDebug: true
+                }
+            },
+
+            init() {
+                this.loadFromLocalStorage();
+                this.checkSession();
+                this.renderAll();
+                this.setupEventListeners();
+                
+                // Mulai sinkronisasi otomatis jika URL GAS tersedia pada load pertama
+                if (this.database.settings.gasUrl) {
+                    this.syncFromGAS();
+                }
+            },
+
+            loadFromLocalStorage() {
+                const savedDb = localStorage.getItem(`${appId}-db`);
+                if (savedDb) {
+                    this.database = JSON.parse(savedDb);
+                }
+            },
+
+            async saveDatabase() {
+                localStorage.setItem(`${appId}-db`, JSON.stringify(this.database));
+                this.renderAll();
+
+                // Lakukan write ke GAS secara realtime jika URL terkonfigurasi
+                if (this.database.settings.gasUrl) {
+                    await this.syncToGAS();
+                }
+            },
+
+            // Ambil semua data mutakhir dari Google Spreadsheet secara aman
+            async syncFromGAS() {
+                if (!this.database.settings.gasUrl) {
+                    showToast('Info', 'URL Google Apps Script belum dikonfigurasi.', 'info');
+                    return;
+                }
+
+                this.setSyncingState(true);
+                showToast('Koneksi...', 'Mengambil data dari Google Sheets...', 'info');
+
+                try {
+                    const result = await fetchFromGAS('syncAll');
+                    if (result && result.success && result.database) {
+                        // Pertahankan pengaturan local URL & Token agar tidak ter-overwrite kosong
+                        const currentGasUrl = this.database.settings.gasUrl;
+                        const currentGasToken = this.database.settings.gasToken;
+
+                        this.database = {
+                            ...this.database,
+                            ...result.database,
+                            settings: {
+                                ...this.database.settings,
+                                ...result.database.settings,
+                                gasUrl: currentGasUrl,
+                                gasToken: currentGasToken
+                            }
+                        };
+
+                        localStorage.setItem(`${appId}-db`, JSON.stringify(this.database));
+                        this.renderAll();
+                        this.updateStatusBadge(true);
+                        showToast('Sukses!', 'Semua data tersinkronisasi dari Google Sheets.', 'success');
+                    } else {
+                        throw new Error(result ? result.error : 'Koneksi gagal.');
+                    }
+                } catch (err) {
+                    console.error(err);
+                    this.updateStatusBadge(false);
+                    showToast('Sync Gagal', 'Gagal memuat spreadsheet: ' + err.message, 'danger');
+                } finally {
+                    this.setSyncingState(false);
+                }
+            },
+
+            // Kirim semua status data mutakhir di frontend ke Google Spreadsheet
+            async syncToGAS() {
+                if (!this.database.settings.gasUrl) return;
+
+                this.setSyncingState(true);
+                try {
+                    // Simpan data licenses
+                    await fetchFromGAS('saveLicense', this.database.licenses);
+                    // Simpan data resellers
+                    await fetchFromGAS('saveReseller', this.database.resellers);
+                    // Simpan data products
+                    await fetchFromGAS('saveProduct', this.database.products);
+                    // Simpan audit logs
+                    await fetchFromGAS('saveAuditLogs', this.database.auditLogs);
+                    
+                    this.updateStatusBadge(true);
+                } catch (err) {
+                    console.error("Write to GAS Failed:", err);
+                    this.updateStatusBadge(false);
+                    showToast('Gagal Simpan', 'Data lokal tersimpan, namun gagal mengirim ke Sheets.', 'warning');
+                } finally {
+                    this.setSyncingState(false);
+                }
+            },
+
+            setSyncingState(syncing) {
+                this.isSyncing = syncing;
+                const icon = document.getElementById('sync-icon');
+                const btn = document.getElementById('btn-manual-sync');
+                if (icon) {
+                    if (syncing) {
+                        icon.classList.add('animate-spin');
+                        if (btn) btn.disabled = true;
+                    } else {
+                        icon.classList.remove('animate-spin');
+                        if (btn) btn.disabled = false;
+                    }
+                }
+            },
+
+            updateStatusBadge(isLive) {
+                const badge = document.getElementById('endpoint-status-badge');
+                const dot = document.getElementById('endpoint-dot');
+                const text = document.getElementById('endpoint-text');
+                const manualBtn = document.getElementById('btn-manual-sync');
+
+                if (badge && dot && text) {
+                    badge.classList.remove('hidden');
+                    if (manualBtn) manualBtn.classList.remove('hidden');
+
+                    if (isLive) {
+                        dot.className = "w-2.5 h-2.5 rounded-full bg-green-500 inline-block animate-ping";
+                        text.textContent = "GAS Endpoint: Live";
+                    } else {
+                        dot.className = "w-2.5 h-2.5 rounded-full bg-red-500 inline-block";
+                        text.textContent = "GAS Endpoint: Error";
+                    }
+                }
+            },
+
+            checkSession() {
+                const session = localStorage.getItem(`${appId}-session`);
+                if (session) {
+                    this.currentUser = JSON.parse(session);
+                    document.getElementById('login-screen').classList.add('hidden');
+                    document.getElementById('app-interface').classList.remove('hidden');
+                    this.updateRoleUI();
+                } else {
+                    document.getElementById('login-screen').classList.remove('hidden');
+                    document.getElementById('app-interface').classList.add('hidden');
+                }
+            },
+
+            login(username, password) {
+                // Production-ready mock auth
+                if (username === 'admin' && password === 'admin') {
+                    this.currentUser = { username: 'admin', role: 'Super Admin', email: 'admin@lvcodex.com', credits: 15000 };
+                } else if (username === 'reseller' && password === 'reseller') {
+                    this.currentUser = { username: 'reseller_lv', role: 'Reseller', email: 'reseller@lvcodex.com', credits: 450 };
+                } else {
+                    // Check if reseller exists in DB
+                    const matchedReseller = this.database.resellers.find(r => r.username.toLowerCase() === username.toLowerCase() && r.status === 'Active');
+                    if (matchedReseller) {
+                        this.currentUser = { username: matchedReseller.username, role: 'Reseller', email: matchedReseller.email, credits: matchedReseller.balance };
+                    } else {
+                        return false;
+                    }
+                }
+
+                localStorage.setItem(`${appId}-session`, JSON.stringify(this.currentUser));
+                this.addAuditLog(this.currentUser.username, 'Auth', 'Login Success', 'User berhasil masuk ke sesi panel');
+                this.checkSession();
+                showToast('Akses Diberikan!', 'Selamat datang kembali, ' + this.currentUser.username, 'success');
+                return true;
+            },
+
+            logout() {
+                if (this.currentUser) {
+                    this.addAuditLog(this.currentUser.username, 'Auth', 'Logout', 'User keluar dari sesi panel');
+                }
+                this.currentUser = null;
+                localStorage.removeItem(`${appId}-session`);
+                this.checkSession();
+                showToast('Keluar Sesi', 'Sesi Anda telah aman dibersihkan', 'info');
+            },
+
+            updateRoleUI() {
+                if (!this.currentUser) return;
+                
+                const roleBadge = document.getElementById('badge-role');
+                const displayName = document.getElementById('user-display-name');
+                const displayCredits = document.getElementById('user-display-credits');
+                const avatarChar = document.getElementById('user-avatar-char');
+
+                roleBadge.textContent = this.currentUser.role.toUpperCase();
+                displayName.textContent = this.currentUser.username;
+                displayCredits.textContent = `Credits: $${this.currentUser.credits.toLocaleString()}`;
+                avatarChar.textContent = this.currentUser.username.charAt(0).toUpperCase();
+
+                // Style based on Role
+                if (this.currentUser.role === 'Super Admin') {
+                    roleBadge.className = "bg-[#a3e635] text-black text-[10px] px-2 py-0.5 font-extrabold uppercase border border-black shadow-neo-sm";
+                } else {
+                    roleBadge.className = "bg-[#38bdf8] text-black text-[10px] px-2 py-0.5 font-extrabold uppercase border border-black shadow-neo-sm";
+                }
+
+                // Hide/Show Admin features dynamically
+                const adminOnlyElements = document.querySelectorAll('.only-admin');
+                adminOnlyElements.forEach(el => {
+                    if (this.currentUser.role === 'Super Admin' || this.currentUser.role === 'Admin') {
+                        el.classList.remove('hidden');
+                    } else {
+                        el.classList.add('hidden');
+                    }
+                });
+
+                // Adjust generation choices based on Role
+                const optPerm = document.getElementById('gen-opt-permanent');
+                if (optPerm) {
+                    if (this.currentUser.role === 'Super Admin' || this.currentUser.role === 'Admin') {
+                        optPerm.disabled = false;
+                        optPerm.classList.remove('hidden');
+                    } else {
+                        optPerm.disabled = true;
+                        optPerm.classList.add('hidden');
+                    }
+                }
+            },
+
+            navigateTo(tabId) {
+                this.activeTab = tabId;
+                
+                // Hide all sections
+                document.querySelectorAll('.page-section').forEach(sec => {
+                    sec.classList.add('hidden');
+                });
+
+                // Show selected section
+                const targetSec = document.getElementById(`page-${tabId}`);
+                if (targetSec) {
+                    targetSec.classList.remove('hidden');
+                }
+
+                // Update Sidebar highlight
+                document.querySelectorAll('.sidebar-btn').forEach(btn => {
+                    if (btn.getAttribute('data-target') === tabId) {
+                        btn.classList.add('sidebar-active');
+                    } else {
+                        btn.classList.remove('sidebar-active');
+                    }
+                });
+
+                // Set navbar heading
+                const titleMapping = {
+                    'dashboard': 'Dashboard Realtime',
+                    'licenses': 'Kunci Lisensi Terdaftar',
+                    'generator': 'Wand Key Generator',
+                    'resellers': 'Kemitraan Reseller',
+                    'users': 'Sesi Client HWID',
+                    'products': 'Daftar Produk Terintegrasi',
+                    'devices': 'Device HWID Registry',
+                    'analytics': 'Pusat Analitik & Keuangan',
+                    'security': 'Security Risk Center',
+                    'logs': 'Audit Logs System',
+                    'settings': 'Pengaturan Dashboard'
+                };
+                
+                document.getElementById('page-title').textContent = titleMapping[tabId] || 'SaaS Manager';
+                
+                // Auto close mobile navigation menu
+                document.getElementById('sidebar-nav').classList.add('hidden');
+                document.getElementById('sidebar-nav').classList.add('md:flex');
+            },
+
+            // LOGIC UTILITY SYSTEM
+            addAuditLog(actor, module, action, detail) {
+                const log = {
+                    timestamp: new Date().toISOString().replace('T', ' ').substring(0, 16),
+                    actor,
+                    module,
+                    action,
+                    detail
+                };
+                this.database.auditLogs.unshift(log);
+                this.saveDatabase();
+            },
+
+            // RENDER LOGICS
+            renderAll() {
+                this.renderDashboard();
+                this.renderLicenses();
+                this.renderResellers();
+                this.renderUsers();
+                this.renderProducts();
+                this.renderBlacklist();
+                this.renderAuditLogs();
+                this.renderSecurityThreats();
+                this.renderDropdowns();
+                this.renderSettings();
+            },
+
+            renderDashboard() {
+                // Update Dashboard Statistics Cards
+                document.getElementById('stat-total-licenses').textContent = this.database.licenses.length.toLocaleString();
+                document.getElementById('stat-active-licenses').textContent = this.database.licenses.filter(l => l.status === 'Active').length.toLocaleString();
+                document.getElementById('stat-expired-licenses').textContent = this.database.licenses.filter(l => l.status === 'Expired').length.toLocaleString();
+                document.getElementById('stat-total-resellers').textContent = this.database.resellers.length.toLocaleString();
+                document.getElementById('stat-total-users').textContent = (this.database.licenses.filter(l => l.hwid !== 'NONE').length * 2 + 12).toString();
+                document.getElementById('stat-online-users').textContent = Math.floor(Math.random() * (220 - 150) + 150).toString();
+                
+                // Estimate Revenue
+                const revVal = (this.database.licenses.length * 15) + (this.database.resellers.reduce((a, b) => a + (b.generatedKeys * 5), 0));
+                document.getElementById('stat-revenue').textContent = `$${revVal.toLocaleString()}`;
+
+                // Dashboard Recent Activations table
+                const activeBody = document.getElementById('dashboard-recent-activations');
+                if (activeBody) {
+                    activeBody.innerHTML = '';
+                    const recentList = this.database.licenses.slice(0, 4);
+                    recentList.forEach(lic => {
+                        const tr = document.createElement('tr');
+                        tr.className = "border-b border-black hover:bg-gray-50";
+                        tr.innerHTML = `
+                            <td class="p-3 font-mono font-bold">${lic.id}</td>
+                            <td class="p-3 font-bold">${lic.product}</td>
+                            <td class="p-3">
+                                <span class="bg-gray-100 text-black px-2 py-0.5 border border-black font-mono text-xs">${lic.deviceName}</span>
+                            </td>
+                            <td class="p-3 text-xs text-gray-500">${lic.createdDate}</td>
+                            <td class="p-3">
+                                <span class="px-2 py-0.5 text-xs font-black uppercase ${
+                                    lic.status === 'Active' ? 'bg-green-300 text-black border border-black' : 
+                                    lic.status === 'Suspended' ? 'bg-yellow-300 text-black border border-black' : 'bg-red-300 text-black border border-black'
+                                }">${lic.status}</span>
+                            </td>
+                        `;
+                        activeBody.appendChild(tr);
+                    });
+                }
+
+                // Security Auditor Logs Widget on Dashboard
+                const widgetAudit = document.getElementById('dashboard-security-audit');
+                if (widgetAudit) {
+                    widgetAudit.innerHTML = '';
+                    this.database.auditLogs.slice(0, 3).forEach(log => {
+                        const div = document.createElement('div');
+                        div.className = "p-3 bg-[#fafafa] neo-border-sm hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all shadow-neo-sm";
+                        div.innerHTML = `
+                            <div class="flex items-center justify-between">
+                                <span class="bg-black text-white text-[9px] px-1.5 py-0.5 font-bold uppercase">${log.module}</span>
+                                <span class="text-[10px] font-bold text-gray-400">${log.timestamp}</span>
+                            </div>
+                            <p class="font-bold text-xs mt-1.5 text-black"><span class="text-blue-600">@${log.actor}</span>: ${log.action}</p>
+                            <p class="text-[11px] text-gray-500 font-semibold mt-0.5">${log.detail}</p>
+                        `;
+                        widgetAudit.appendChild(div);
+                    });
+                }
+
+                // Product usage widget
+                const widgetUsage = document.getElementById('dashboard-product-usage');
+                if (widgetUsage) {
+                    widgetUsage.innerHTML = '';
+                    const totalLics = this.database.licenses.length || 1;
+                    this.database.products.forEach((prod, index) => {
+                        const count = this.database.licenses.filter(l => l.product === prod.name).length;
+                        const percentage = Math.round((count / totalLics) * 100);
+                        const colors = ['bg-[#f87171]', 'bg-[#60a5fa]', 'bg-[#a3e635]'];
+                        const color = colors[index % colors.length];
+
+                        const div = document.createElement('div');
+                        div.className = "space-y-1";
+                        div.innerHTML = `
+                            <div class="flex justify-between text-xs font-black uppercase">
+                                <span class="truncate pr-2">${prod.name}</span>
+                                <span>${percentage}% (${count})</span>
+                            </div>
+                            <div class="w-full bg-gray-100 h-4 border border-black overflow-hidden shadow-neo-sm">
+                                <div class="${color} h-full border-r border-black" style="width: ${percentage}%"></div>
+                            </div>
+                        `;
+                        widgetUsage.appendChild(div);
+                    });
+                }
+            },
+
+            renderLicenses() {
+                const tbody = document.getElementById('licenses-table-body');
+                if (!tbody) return;
+                tbody.innerHTML = '';
+
+                // Search & Filter
+                const searchVal = document.getElementById('license-search').value.toLowerCase();
+                const filterProd = document.getElementById('license-filter-product').value;
+                const filterStat = document.getElementById('license-filter-status').value;
+
+                let filtered = this.database.licenses.filter(lic => {
+                    const matchesSearch = lic.key.toLowerCase().includes(searchVal) || 
+                                          lic.id.toLowerCase().includes(searchVal) || 
+                                          lic.owner.toLowerCase().includes(searchVal) ||
+                                          lic.hwid.toLowerCase().includes(searchVal);
+                    const matchesProd = filterProd === 'ALL' || lic.product === filterProd;
+                    const matchesStat = filterStat === 'ALL' || lic.status === filterStat;
+
+                    return matchesSearch && matchesProd && matchesStat;
+                });
+
+                // Pagination counts
+                document.getElementById('license-count-start').textContent = filtered.length > 0 ? '1' : '0';
+                document.getElementById('license-count-end').textContent = filtered.length.toString();
+                document.getElementById('license-count-total').textContent = filtered.length.toString();
+
+                if (filtered.length === 0) {
+                    tbody.innerHTML = `
+                        <tr>
+                            <td colspan="8" class="text-center p-8 text-gray-400 font-bold uppercase">
+                                Tidak ada data lisensi yang cocok.
+                            </td>
+                        </tr>
+                    `;
+                    return;
+                }
+
+                filtered.forEach(lic => {
+                    const tr = document.createElement('tr');
+                    tr.className = "border-b border-black hover:bg-gray-50/80 transition-colors";
+                    tr.innerHTML = `
+                        <td class="p-4">
+                            <div class="font-extrabold text-xs text-blue-600">${lic.id}</div>
+                            <div class="font-mono text-xs font-bold bg-[#fafafa] p-1 border border-black mt-1 select-all flex items-center justify-between">
+                                <span>${lic.key}</span>
+                                <button onclick="clipboardCopy('${lic.key}')" class="text-gray-400 hover:text-black ml-2"><i class="fa-regular fa-copy"></i></button>
+                            </div>
+                        </td>
+                        <td class="p-4 font-bold text-xs">${lic.product}</td>
+                        <td class="p-4 font-bold text-xs text-gray-700">${lic.owner}</td>
+                        <td class="p-4">
+                            <div class="font-mono text-xs font-semibold max-w-[150px] truncate" title="${lic.hwid}">${lic.hwid}</div>
+                            <div class="text-[10px] text-gray-400 font-bold uppercase">${lic.deviceName}</div>
+                        </td>
+                        <td class="p-4">
+                            <span class="px-2 py-0.5 text-xs font-black uppercase ${
+                                lic.status === 'Active' ? 'bg-[#a3e635] text-black border border-black' : 
+                                lic.status === 'Suspended' ? 'bg-[#fbbf24] text-black border border-black' : 'bg-[#f87171] text-black border border-black'
+                            }">${lic.status}</span>
+                        </td>
+                        <td class="p-4 text-xs font-bold text-gray-600">${lic.duration === 9999 ? 'Permanen (Lifetime)' : lic.duration + ' Hari'}</td>
+                        <td class="p-4">
+                            <span class="text-xs bg-[#fbcfe8] text-black border border-black px-1.5 py-0.5 font-extrabold uppercase">${lic.createdBy}</span>
+                        </td>
+                        <td class="p-4 text-center">
+                            <div class="flex items-center justify-center gap-1.5">
+                                ${lic.status === 'Active' ? 
+                                    `<button onclick="actionSuspendLicense('${lic.id}')" class="p-1.5 bg-yellow-300 hover:bg-yellow-400 border border-black shadow-neo-sm" title="Suspend"><i class="fa-solid fa-ban"></i></button>` :
+                                    `<button onclick="actionActivateLicense('${lic.id}')" class="p-1.5 bg-green-300 hover:bg-green-400 border border-black shadow-neo-sm" title="Re-Activate"><i class="fa-solid fa-check"></i></button>`
+                                }
+                                <button onclick="actionExtendLicense('${lic.id}')" class="p-1.5 bg-blue-300 hover:bg-blue-400 border border-black shadow-neo-sm" title="Tambah Durasi"><i class="fa-solid fa-clock-rotate-left"></i></button>
+                                <button onclick="actionResetHWID('${lic.id}')" class="p-1.5 bg-purple-300 hover:bg-purple-400 border border-black shadow-neo-sm" title="Reset HWID"><i class="fa-solid fa-arrows-rotate"></i></button>
+                                <button onclick="actionDeleteLicense('${lic.id}')" class="p-1.5 bg-red-400 hover:bg-red-500 border border-black shadow-neo-sm" title="Hapus Lisensi"><i class="fa-solid fa-trash-can"></i></button>
+                            </div>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            },
+
+            renderResellers() {
+                const tbody = document.getElementById('reseller-table-body');
+                if (!tbody) return;
+                tbody.innerHTML = '';
+
+                const searchVal = document.getElementById('reseller-search').value.toLowerCase();
+                const filtered = this.database.resellers.filter(res => {
+                    return res.username.toLowerCase().includes(searchVal) || res.email.toLowerCase().includes(searchVal) || res.id.toLowerCase().includes(searchVal);
+                });
+
+                if (filtered.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="8" class="text-center p-8 text-gray-400 font-bold uppercase">Tidak ada partner reseller terdaftar.</td></tr>`;
+                    return;
+                }
+
+                filtered.forEach(res => {
+                    const tr = document.createElement('tr');
+                    tr.className = "border-b border-black hover:bg-gray-50/80 transition-colors";
+                    tr.innerHTML = `
+                        <td class="p-4 font-bold text-xs text-blue-600">${res.id}</td>
+                        <td class="p-4">
+                            <div class="font-extrabold text-sm">${res.username}</div>
+                            <div class="text-xs text-gray-400 font-semibold">${res.email}</div>
+                        </td>
+                        <td class="p-4 font-black text-[#16a34a]">$${parseFloat(res.balance).toLocaleString()}</td>
+                        <td class="p-4 font-bold text-xs">${res.generatedKeys} Keys</td>
+                        <td class="p-4 font-bold text-xs">${res.activeKeys} Keys</td>
+                        <td class="p-4 text-xs font-semibold text-gray-500">${res.regDate}</td>
+                        <td class="p-4">
+                            <span class="px-2 py-0.5 text-xs font-black uppercase ${res.status === 'Active' ? 'bg-[#a3e635] text-black border border-black' : 'bg-[#f87171] text-black border border-black'}">${res.status}</span>
+                        </td>
+                        <td class="p-4 text-center">
+                            <div class="flex items-center justify-center gap-1.5">
+                                <button onclick="resellerModal.openEdit('${res.id}')" class="p-1.5 bg-yellow-300 border border-black shadow-neo-sm" title="Edit Reseller"><i class="fa-solid fa-user-pen"></i></button>
+                                <button onclick="actionTopUpReseller('${res.id}')" class="p-1.5 bg-green-300 border border-black shadow-neo-sm" title="Top Up Kredit"><i class="fa-solid fa-circle-dollar-to-slot"></i></button>
+                                <button onclick="actionDeleteReseller('${res.id}')" class="p-1.5 bg-red-400 border border-black shadow-neo-sm" title="Hapus"><i class="fa-solid fa-trash-can"></i></button>
+                            </div>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            },
+
+            renderUsers() {
+                const tbody = document.getElementById('users-table-body');
+                if (!tbody) return;
+                tbody.innerHTML = '';
+
+                const searchVal = document.getElementById('users-search').value.toLowerCase();
+                const filtered = this.database.licenses.filter(lic => {
+                    return lic.hwid !== 'NONE' && (
+                        lic.owner.toLowerCase().includes(searchVal) || 
+                        lic.product.toLowerCase().includes(searchVal) || 
+                        lic.hwid.toLowerCase().includes(searchVal)
+                    );
+                });
+
+                if (filtered.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="7" class="text-center p-8 text-gray-400 font-bold uppercase">Tidak ada client active device terdeteksi.</td></tr>`;
+                    return;
+                }
+
+                filtered.forEach(lic => {
+                    const tr = document.createElement('tr');
+                    tr.className = "border-b border-black hover:bg-gray-50";
+                    tr.innerHTML = `
+                        <td class="p-4">
+                            <div class="font-extrabold text-sm text-gray-800">${lic.owner}</div>
+                            <div class="text-xs text-gray-400 font-bold uppercase">User ID: U-${lic.id.split('-')[1]}</div>
+                        </td>
+                        <td class="p-4 font-mono text-xs font-semibold">${lic.key.substring(0, 15)}...</td>
+                        <td class="p-4 font-bold text-xs">${lic.product}</td>
+                        <td class="p-4">
+                            <div class="font-mono text-xs font-bold bg-neutral-900 text-white px-2 py-0.5 border border-black shadow-neo-sm inline-block">${lic.hwid}</div>
+                            <p class="text-[10px] text-gray-400 font-bold uppercase mt-1">Host: ${lic.deviceName}</p>
+                        </td>
+                        <td class="p-4 text-xs font-bold text-gray-500">${lic.createdDate}</td>
+                        <td class="p-4">
+                            <span class="px-2 py-0.5 text-xs font-black uppercase bg-[#a3e635] text-black border border-black shadow-neo-sm">Online</span>
+                        </td>
+                        <td class="p-4 text-center">
+                            <div class="flex items-center justify-center gap-1.5">
+                                <button onclick="actionResetHWID('${lic.id}')" class="px-3 py-1.5 bg-blue-300 hover:bg-blue-400 text-xs font-extrabold border border-black shadow-neo-sm uppercase active:translate-y-0.5 transition-all">
+                                    Reset HWID
+                                </button>
+                                <button onclick="actionSuspendLicense('${lic.id}')" class="px-3 py-1.5 bg-red-400 hover:bg-red-500 text-xs font-extrabold border border-black shadow-neo-sm uppercase active:translate-y-0.5 transition-all">
+                                    Ban User
+                                </button>
+                            </div>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            },
+
+            renderProducts() {
+                const grid = document.getElementById('product-grid');
+                if (!grid) return;
+                grid.innerHTML = '';
+
+                this.database.products.forEach(prod => {
+                    const div = document.createElement('div');
+                    div.className = "bg-white p-6 neo-border shadow-neo flex flex-col justify-between";
+                    div.innerHTML = `
+                        <div>
+                            <div class="flex items-start justify-between">
+                                <span class="bg-black text-white text-[10px] px-2 py-0.5 font-bold uppercase border border-black shadow-neo-sm">${prod.version}</span>
+                                <span class="px-2 py-0.5 text-xs font-black uppercase bg-[#a3e635] text-black border border-black shadow-neo-sm">${prod.status}</span>
+                            </div>
+                            <h4 class="neo-title text-xl font-black uppercase mt-3">${prod.name}</h4>
+                            <p class="text-xs text-gray-500 font-semibold mt-2 h-12 overflow-hidden">${prod.desc}</p>
+                            <div class="mt-4 bg-gray-100 p-2 border border-black select-all font-mono text-[10px] truncate" title="${prod.download}">
+                                URL: ${prod.download}
+                            </div>
+                        </div>
+                        <div class="mt-6 pt-4 border-t-2 border-black border-dashed flex gap-2">
+                            <button onclick="productModal.openEdit('${prod.id}')" class="flex-1 py-2 bg-yellow-300 hover:bg-yellow-400 border border-black text-xs font-black uppercase shadow-neo-sm neo-interactive">Edit</button>
+                            <button onclick="actionDeleteProduct('${prod.id}')" class="flex-1 py-2 bg-red-400 hover:bg-red-500 border border-black text-xs font-black uppercase shadow-neo-sm neo-interactive">Delete</button>
+                        </div>
+                    `;
+                    grid.appendChild(div);
+                });
+            },
+
+            renderBlacklist() {
+                const tbody = document.getElementById('blacklist-table-body');
+                if (!tbody) return;
+                tbody.innerHTML = '';
+
+                if (this.database.blacklistHWID.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="4" class="text-center p-8 text-gray-400 font-bold uppercase">Belum ada HWID yang diblacklist secara manual.</td></tr>`;
+                    return;
+                }
+
+                this.database.blacklistHWID.forEach((item, index) => {
+                    const tr = document.createElement('tr');
+                    tr.className = "border-b border-black hover:bg-gray-50";
+                    tr.innerHTML = `
+                        <td class="p-3 font-mono text-xs font-black text-red-600">${item.hwid}</td>
+                        <td class="p-3 text-xs font-bold text-gray-700">${item.reason}</td>
+                        <td class="p-3 text-xs font-semibold text-gray-500">${item.date}</td>
+                        <td class="p-3 text-center">
+                            <button onclick="actionUnblacklistHWID(${index})" class="px-2.5 py-1 bg-green-300 hover:bg-green-400 text-xs font-black uppercase border border-black shadow-neo-sm transition-all active:translate-y-0.5">
+                                Unban HWID
+                            </button>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            },
+
+            renderAuditLogs() {
+                const tbody = document.getElementById('system-audit-logs');
+                if (!tbody) return;
+                tbody.innerHTML = '';
+
+                this.database.auditLogs.forEach(log => {
+                    const tr = document.createElement('tr');
+                    tr.className = "border-b border-black hover:bg-gray-50";
+                    tr.innerHTML = `
+                        <td class="p-3 text-xs font-bold text-gray-500">${log.timestamp}</td>
+                        <td class="p-3"><span class="bg-[#fbcfe8] text-black border border-black px-1.5 py-0.5 text-xs font-black uppercase">@${log.actor}</span></td>
+                        <td class="p-3"><span class="bg-black text-white px-2 py-0.5 text-[10px] font-bold uppercase">${log.module}</span></td>
+                        <td class="p-3 font-extrabold text-xs text-blue-600">${log.action}</td>
+                        <td class="p-3 text-xs font-semibold text-gray-600">${log.detail}</td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            },
+
+            renderSecurityThreats() {
+                const tbody = document.getElementById('security-threats-table');
+                if (!tbody) return;
+                tbody.innerHTML = '';
+
+                this.database.threats.forEach(thr => {
+                    const tr = document.createElement('tr');
+                    tr.className = "border-b border-black hover:bg-red-50";
+                    tr.innerHTML = `
+                        <td class="p-3 text-xs font-bold text-gray-500">${thr.time}</td>
+                        <td class="p-3 font-mono text-xs font-bold">${thr.target}</td>
+                        <td class="p-3 font-extrabold text-xs text-red-600">${thr.event}</td>
+                        <td class="p-3">
+                            <span class="px-2 py-0.5 text-[10px] font-black uppercase bg-red-400 text-black border border-black shadow-neo-sm">${thr.severity}</span>
+                        </td>
+                        <td class="p-3 text-center text-xs font-extrabold text-green-700">${thr.mitigation}</td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            },
+
+            renderDropdowns() {
+                // Fill product select options inside key generator & licenses filter
+                const genProdSelect = document.getElementById('gen-product');
+                const filterProdSelect = document.getElementById('license-filter-product');
+
+                if (genProdSelect) {
+                    genProdSelect.innerHTML = '';
+                    this.database.products.forEach(p => {
+                        const opt = document.createElement('option');
+                        opt.value = p.name;
+                        opt.textContent = p.name;
+                        genProdSelect.appendChild(opt);
+                    });
+                }
+
+                if (filterProdSelect) {
+                    // Keep the All option
+                    filterProdSelect.innerHTML = '<option value="ALL">Semua Produk</option>';
+                    this.database.products.forEach(p => {
+                        const opt = document.createElement('option');
+                        opt.value = p.name;
+                        opt.textContent = p.name;
+                        filterProdSelect.appendChild(opt);
+                    });
+                }
+            },
+
+            renderSettings() {
+                document.getElementById('settings-gas-url').value = this.database.settings.gasUrl || '';
+                document.getElementById('settings-gas-token').value = this.database.settings.gasToken || '';
+                document.getElementById('settings-saas-name').value = this.database.settings.saasName || 'LVCODEX Key Manager';
+                document.getElementById('settings-saas-prefix').value = this.database.settings.saasPrefix || 'LVC';
+                document.getElementById('settings-strict-hwid').checked = this.database.settings.strictHwid !== false;
+                document.getElementById('settings-max-reset').value = this.database.settings.maxReset || 3;
+                document.getElementById('settings-anti-debug').checked = this.database.settings.antiDebug !== false;
+            },
+
+            setupEventListeners() {
+                // Sidebar click handling
+                document.querySelectorAll('.sidebar-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const target = e.currentTarget.getAttribute('data-target');
+                        this.navigateTo(target);
+                    });
+                });
+
+                // Top Navbar manual sync click
+                const btnManualSync = document.getElementById('btn-manual-sync');
+                if (btnManualSync) {
+                    btnManualSync.addEventListener('click', () => {
+                        this.syncFromGAS();
+                    });
+                }
+
+                // Mobile menu trigger toggle
+                const mobToggle = document.getElementById('mobile-menu-toggle');
+                if (mobToggle) {
+                    mobToggle.addEventListener('click', () => {
+                        const sidebarNav = document.getElementById('sidebar-nav');
+                        sidebarNav.classList.toggle('hidden');
+                    });
+                }
+
+                // Settings tab switcher
+                document.querySelectorAll('.settings-tab-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        // Reset all tabs styles
+                        document.querySelectorAll('.settings-tab-btn').forEach(b => {
+                            b.className = "settings-tab-btn flex-1 py-3 font-extrabold uppercase text-xs sm:text-sm border-r-2 border-black";
+                        });
+                        document.querySelectorAll('.settings-tab-pane').forEach(p => p.classList.add('hidden'));
+
+                        // Highlight active
+                        const tabKey = e.currentTarget.getAttribute('data-set-tab');
+                        e.currentTarget.className = "settings-tab-btn flex-1 py-3 font-extrabold uppercase text-xs sm:text-sm border-r-2 border-black bg-[#a3e635] text-black";
+                        
+                        document.getElementById(`setting-tab-content-${tabKey}`).classList.remove('hidden');
+                    });
+                });
+
+                // Filter license handlers
+                const filProd = document.getElementById('license-filter-product');
+                if (filProd) {
+                    filProd.addEventListener('change', () => this.renderLicenses());
+                }
+                const filStat = document.getElementById('license-filter-status');
+                if (filStat) {
+                    filStat.addEventListener('change', () => this.renderLicenses());
+                }
+                const searchLic = document.getElementById('license-search');
+                if (searchLic) {
+                    searchLic.addEventListener('input', () => this.renderLicenses());
+                }
+
+                // Filter resellers
+                const searchRes = document.getElementById('reseller-search');
+                if (searchRes) {
+                    searchRes.addEventListener('input', () => this.renderResellers());
+                }
+
+                // Filter users
+                const searchUsr = document.getElementById('users-search');
+                if (searchUsr) {
+                    searchUsr.addEventListener('input', () => this.renderUsers());
+                }
+
+                // Generator submit handling
+                const genForm = document.getElementById('generator-form');
+                if (genForm) {
+                    genForm.addEventListener('submit', async (e) => {
+                        e.preventDefault();
+                        const prod = document.getElementById('gen-product').value;
+                        const durDays = parseInt(document.getElementById('gen-duration').value);
+                        const qty = parseInt(document.getElementById('gen-quantity').value);
+                        const owner = document.getElementById('gen-owner').value || 'SaaS Client';
+
+                        // Deduct Reseller Balance if not Admin
+                        if (appState.currentUser.role === 'Reseller') {
+                            const cost = qty * 5; // Simulates cost of 5 credits per license
+                            if (appState.currentUser.credits < cost) {
+                                showToast('Ditolak!', 'Kredit Anda tidak mencukupi untuk batch gen ini!', 'danger');
+                                return;
+                            }
+                            appState.currentUser.credits -= cost;
+                            // Update matching reseller in DB
+                            const match = this.database.resellers.find(r => r.username === appState.currentUser.username);
+                            if (match) {
+                                match.balance = appState.currentUser.credits;
+                                match.generatedKeys += qty;
+                            }
+                        }
+
+                        let keysOutput = [];
+                        const prefix = this.database.settings.saasPrefix || 'LVC';
+
+                        for (let i = 0; i < qty; i++) {
+                            const randomKey = `${prefix}-${Math.floor(1000 + Math.random() * 9000)}-${Math.floor(1000 + Math.random() * 9000)}-${Math.floor(1000 + Math.random() * 9000)}-${Math.floor(1000 + Math.random() * 9000)}`;
+                            const licId = `LIC-${Math.floor(100 + Math.random() * 900)}`;
+                            
+                            const newLic = {
+                                id: licId,
+                                key: randomKey,
+                                product: prod,
+                                owner: qty === 1 ? owner : `Bulk Client ${i+1}`,
+                                hwid: 'NONE',
+                                status: 'Active',
+                                duration: durDays,
+                                createdBy: this.currentUser.username,
+                                createdDate: new Date().toISOString().replace('T', ' ').substring(0, 16),
+                                deviceName: 'NONE'
+                            };
+
+                            this.database.licenses.unshift(newLic);
+                            keysOutput.push(randomKey);
+                        }
+
+                        this.addAuditLog(this.currentUser.username, 'License', 'Bulk Key Generate', `Hasilkan ${qty} lisensi untuk produk: ${prod}`);
+                        await this.saveDatabase();
+
+                        // Fill outputs
+                        const emptyEl = document.getElementById('gen-empty-state');
+                        const resultEl = document.getElementById('gen-result-container');
+                        const outText = document.getElementById('gen-output-text');
+                        const actionWrap = document.getElementById('gen-actions-wrapper');
+
+                        emptyEl.classList.add('hidden');
+                        resultEl.classList.remove('hidden');
+                        actionWrap.classList.remove('hidden');
+
+                        outText.value = keysOutput.join('\n');
+                        
+                        showToast('Berhasil!', `${qty} Serial Key Lisensi telah didaftarkan ke DB.`, 'success');
+                    });
+                }
+
+                // Copy Generated Keys handler
+                const btnCopyAll = document.getElementById('btn-copy-all-gen');
+                if (btnCopyAll) {
+                    btnCopyAll.addEventListener('click', () => {
+                        const outText = document.getElementById('gen-output-text');
+                        clipboardCopy(outText.value);
+                        showToast('Tersalin!', 'Semua kunci lisensi baru disalin ke Clipboard', 'success');
+                    });
+                }
+
+                // Export Generated Keys as TXT File download
+                const btnExport = document.getElementById('btn-export-gen');
+                if (btnExport) {
+                    btnExport.addEventListener('click', () => {
+                        const outText = document.getElementById('gen-output-text').value;
+                        const element = document.createElement("a");
+                        const file = new Blob([outText], {type: 'text/plain'});
+                        element.href = URL.createObjectURL(file);
+                        element.download = "LVCODEX-KEYS-GEN.txt";
+                        document.body.appendChild(element);
+                        element.click();
+                        document.body.removeChild(element);
+                    });
+                }
+
+                // Blacklist HWID Manual Form submit
+                const formBlacklist = document.getElementById('form-blacklist-hwid');
+                if (formBlacklist) {
+                    formBlacklist.addEventListener('submit', async (e) => {
+                        e.preventDefault();
+                        const hwid = document.getElementById('blacklist-hwid-val').value;
+                        const reason = document.getElementById('blacklist-hwid-reason').value;
+
+                        const newItem = {
+                            hwid: hwid.toUpperCase(),
+                            reason,
+                            date: new Date().toISOString().replace('T', ' ').substring(0, 16)
+                        };
+
+                        this.database.blacklistHWID.unshift(newItem);
+                        
+                        // Terminate licenses matching this HWID
+                        this.database.licenses.forEach(l => {
+                            if (l.hwid === hwid.toUpperCase()) {
+                                l.status = 'Suspended';
+                            }
+                        });
+
+                        this.addAuditLog(this.currentUser.username, 'HWID', 'Blacklist HWID', `Blokir HWID perangkat: ${hwid}`);
+                        await this.saveDatabase();
+                        
+                        // Clear fields
+                        document.getElementById('blacklist-hwid-val').value = '';
+                        document.getElementById('blacklist-hwid-reason').value = '';
+                        
+                        showToast('Blacklisted!', 'HWID berhasil dikunci & ditambahkan ke blacklist global', 'danger');
+                    });
+                }
+
+                // Settings Form submit
+                const btnSaveSet = document.getElementById('btn-save-settings');
+                if (btnSaveSet) {
+                    btnSaveSet.addEventListener('click', async () => {
+                        const gasUrl = document.getElementById('settings-gas-url').value;
+                        const gasToken = document.getElementById('settings-gas-token').value;
+                        const saasName = document.getElementById('settings-saas-name').value;
+                        const saasPrefix = document.getElementById('settings-saas-prefix').value;
+                        const strictHwid = document.getElementById('settings-strict-hwid').checked;
+                        const maxReset = parseInt(document.getElementById('settings-max-reset').value);
+                        const antiDebug = document.getElementById('settings-anti-debug').checked;
+
+                        this.database.settings = { gasUrl, gasToken, saasName, saasPrefix, strictHwid, maxReset, antiDebug };
+                        this.addAuditLog(this.currentUser.username, 'Settings', 'Update Config', 'Memperbarui parameter sistem global.');
+                        
+                        // Khusus penyimpanan setting: panggil GAS syncAll setelah write local
+                        localStorage.setItem(`${appId}-db`, JSON.stringify(this.database));
+                        this.renderAll();
+                        
+                        if (gasUrl) {
+                            showToast('Menghubungkan...', 'Mencoba terhubung dengan endpoint baru...', 'info');
+                            await this.syncFromGAS();
+                        } else {
+                            showToast('Disimpan!', 'Konfigurasi lokal berhasil disimpan.', 'success');
+                        }
+                    });
+                }
+
+                // Clear Logs handler
+                const btnClearLogs = document.getElementById('btn-clear-logs');
+                if (btnClearLogs) {
+                    btnClearLogs.addEventListener('click', async () => {
+                        this.database.auditLogs = [];
+                        this.addAuditLog(this.currentUser.username, 'Settings', 'Flush Audit Logs', 'Membersihkan semua log audit trail sistem.');
+                        await this.saveDatabase();
+                        showToast('Dibersihkan!', 'Histori logs telah direset kosong', 'info');
+                    });
+                }
+            }
+        };
+
+        // UI TOAST HANDLING (No Alert Guardrail)
+        function showToast(title, message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            if (!container) return;
+            const toast = document.createElement('div');
+            
+            const colorMapping = {
+                'success': 'bg-[#a3e635]', // Lime
+                'danger': 'bg-[#f87171]', // Red
+                'warning': 'bg-[#fbbf24]', // Yellow
+                'info': 'bg-[#60a5fa]' // Blue
+            };
+
+            const iconMapping = {
+                'success': 'fa-circle-check',
+                'danger': 'fa-circle-xmark',
+                'warning': 'fa-triangle-exclamation',
+                'info': 'fa-circle-info'
+            };
+
+            toast.className = `p-4 neo-border shadow-neo ${colorMapping[type] || 'bg-white'} flex gap-3 items-start animate-bounce-short`;
+            toast.innerHTML = `
+                <div class="text-xl text-black"><i class="fa-solid ${iconMapping[type]}"></i></div>
+                <div>
+                    <h5 class="font-extrabold text-sm uppercase tracking-wider">${title}</h5>
+                    <p class="text-xs font-bold text-slate-800 mt-1 leading-normal">${message}</p>
+                </div>
+            `;
+
+            container.appendChild(toast);
+            
+            // Remove after 4.5s
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'transition-opacity', 'duration-300');
+                setTimeout(() => toast.remove(), 300);
+            }, 4500);
+        }
+
+        // CLIPBOARD UTILITY
+        function clipboardCopy(text) {
+            const el = document.createElement('textarea');
+            el.value = text;
+            document.body.appendChild(el);
+            el.select();
+            document.execCommand('copy');
+            document.body.removeChild(el);
+            showToast('Tersalin!', 'Teks berhasil disalin ke clipboard Anda', 'info');
+        }
+
+        // CORE LICENSE ACTIONS
+        async function actionSuspendLicense(id) {
+            const match = appState.database.licenses.find(l => l.id === id);
+            if (match) {
+                match.status = 'Suspended';
+                appState.addAuditLog(appState.currentUser.username, 'License', 'Suspend Key', `Menangguhkan akses lisensi ID: ${id}`);
+                await appState.saveDatabase();
+                showToast('Key Suspended!', `Lisensi ${id} telah ditangguhkan sementara`, 'warning');
+            }
+        }
+
+        async function actionActivateLicense(id) {
+            const match = appState.database.licenses.find(l => l.id === id);
+            if (match) {
+                match.status = 'Active';
+                appState.addAuditLog(appState.currentUser.username, 'License', 'Re-Activate Key', `Mengaktifkan kembali akses lisensi ID: ${id}`);
+                await appState.saveDatabase();
+                showToast('Key Aktif!', `Lisensi ${id} kembali aktif normal`, 'success');
+            }
+        }
+
+        async function actionResetHWID(id) {
+            const match = appState.database.licenses.find(l => l.id === id);
+            if (match) {
+                match.hwid = 'NONE';
+                match.deviceName = 'NONE';
+                appState.addAuditLog(appState.currentUser.username, 'HWID', 'Reset HWID Key', `Reset binding hardware ID lisensi ID: ${id}`);
+                await appState.saveDatabase();
+                showToast('HWID Direset!', `Client dapat mendaftarkan PC/Device baru pada lisensi ${id}`, 'success');
+            }
+        }
+
+        async function actionExtendLicense(id) {
+            const match = appState.database.licenses.find(l => l.id === id);
+            if (match) {
+                if (match.duration === 9999) {
+                    showToast('Gagal', 'Lisensi sudah berdurasi Permanen!', 'warning');
+                    return;
+                }
+                match.duration += 30; // Extend 30 days
+                appState.addAuditLog(appState.currentUser.username, 'License', 'Extend Days', `Perpanjang durasi lisensi ${id} (+30 Hari)`);
+                await appState.saveDatabase();
+                showToast('Diperpanjang!', `Durasi lisensi ${id} ditambahkan +30 Hari`, 'success');
+            }
+        }
+
+        async function actionDeleteLicense(id) {
+            if (confirm(`Hapus Lisensi ${id} secara permanen dari spreadsheet database?`)) {
+                appState.database.licenses = appState.database.licenses.filter(l => l.id !== id);
+                appState.addAuditLog(appState.currentUser.username, 'License', 'Delete License', `Hapus lisensi ID: ${id}`);
+                await appState.saveDatabase();
+                showToast('Dihapus!', 'Lisensi telah dihapus dari server spreadsheet database', 'danger');
+            }
+        }
+
+        // CORE RESELLER MODAL CONTROLLER
+        const resellerModal = {
+            openCreate() {
+                document.getElementById('reseller-modal-title').textContent = "Tambah Reseller Baru";
+                document.getElementById('reseller-form-id').value = '';
+                document.getElementById('reseller-form-username').value = '';
+                document.getElementById('reseller-form-email').value = '';
+                document.getElementById('reseller-form-balance').value = '100';
+                document.getElementById('reseller-form-status').value = 'Active';
+                document.getElementById('reseller-modal').classList.remove('hidden');
+            },
+            openEdit(id) {
+                const match = appState.database.resellers.find(r => r.id === id);
+                if (match) {
+                    document.getElementById('reseller-modal-title').textContent = "Ubah Data Partner Reseller";
+                    document.getElementById('reseller-form-id').value = match.id;
+                    document.getElementById('reseller-form-username').value = match.username;
+                    document.getElementById('reseller-form-email').value = match.email;
+                    document.getElementById('reseller-form-balance').value = match.balance;
+                    document.getElementById('reseller-form-status').value = match.status;
+                    document.getElementById('reseller-modal').classList.remove('hidden');
+                }
+            },
+            close() {
+                document.getElementById('reseller-modal').classList.add('hidden');
+            }
+        };
+
+        // Form Submit handler
+        document.getElementById('reseller-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('reseller-form-id').value;
+            const username = document.getElementById('reseller-form-username').value;
+            const email = document.getElementById('reseller-form-email').value;
+            const balance = parseFloat(document.getElementById('reseller-form-balance').value);
+            const status = document.getElementById('reseller-form-status').value;
+
+            if (id) {
+                // Update
+                const match = appState.database.resellers.find(r => r.id === id);
+                if (match) {
+                    match.username = username;
+                    match.email = email;
+                    match.balance = balance;
+                    match.status = status;
+                    appState.addAuditLog(appState.currentUser.username, 'Reseller', 'Update Partner', `Ubah partner reseller ID: ${id}`);
+                }
+            } else {
+                // Create
+                const newRes = {
+                    id: `RSL-${Math.floor(100 + Math.random() * 900)}`,
+                    username,
+                    email,
+                    balance,
+                    generatedKeys: 0,
+                    activeKeys: 0,
+                    regDate: new Date().toISOString().substring(0, 10),
+                    status
+                };
+                appState.database.resellers.unshift(newRes);
+                appState.addAuditLog(appState.currentUser.username, 'Reseller', 'Create Reseller', `Daftarkan partner reseller baru: ${username}`);
+            }
+
+            await appState.saveDatabase();
+            resellerModal.close();
+            showToast('Berhasil!', 'Informasi data kemitraan reseller diperbarui', 'success');
+        });
+
+        async function actionTopUpReseller(id) {
+            const amountStr = prompt("Masukkan jumlah kredit top up ($):");
+            const amount = parseFloat(amountStr);
+            if (!isNaN(amount) && amount > 0) {
+                const match = appState.database.resellers.find(r => r.id === id);
+                if (match) {
+                    match.balance += amount;
+                    appState.addAuditLog(appState.currentUser.username, 'Reseller', 'Top Up Credit', `Top up saldo kredit partner ${match.username} sebesar $${amount}`);
+                    await appState.saveDatabase();
+                    showToast('Top Up Berhasil!', `Ditambahkan +$${amount} ke saldo partner ${match.username}`, 'success');
+                }
+            }
+        }
+
+        async function actionDeleteReseller(id) {
+            if (confirm(`Hapus partner reseller ini secara permanen dari database?`)) {
+                appState.database.resellers = appState.database.resellers.filter(r => r.id !== id);
+                appState.addAuditLog(appState.currentUser.username, 'Reseller', 'Delete Reseller', `Hapus partner reseller ID: ${id}`);
+                await appState.saveDatabase();
+                showToast('Dihapus!', 'Reseller dihapus permanen', 'danger');
+            }
+        }
+
+        // CORE PRODUCT MODAL CONTROLLER
+        const productModal = {
+            openCreate() {
+                document.getElementById('product-modal-title').textContent = "Daftarkan Produk Baru";
+                document.getElementById('product-form-id').value = '';
+                document.getElementById('product-form-name').value = '';
+                document.getElementById('product-form-version').value = '1.0.0';
+                document.getElementById('product-form-download').value = '';
+                document.getElementById('product-form-desc').value = '';
+                document.getElementById('product-modal').classList.remove('hidden');
+            },
+            openEdit(id) {
+                const match = appState.database.products.find(p => p.id === id);
+                if (match) {
+                    document.getElementById('product-modal-title').textContent = "Ubah Spesifikasi Produk";
+                    document.getElementById('product-form-id').value = match.id;
+                    document.getElementById('product-form-name').value = match.name;
+                    document.getElementById('product-form-version').value = match.version;
+                    document.getElementById('product-form-download').value = match.download;
+                    document.getElementById('product-form-desc').value = match.desc;
+                    document.getElementById('product-modal').classList.remove('hidden');
+                }
+            },
+            close() {
+                document.getElementById('product-modal').classList.add('hidden');
+            }
+        };
+
+        // Form Submit
+        document.getElementById('product-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('product-form-id').value;
+            const name = document.getElementById('product-form-name').value;
+            const version = document.getElementById('product-form-version').value;
+            const download = document.getElementById('product-form-download').value;
+            const desc = document.getElementById('product-form-desc').value;
+
+            if (id) {
+                const match = appState.database.products.find(p => p.id === id);
+                if (match) {
+                    match.name = name;
+                    match.version = version;
+                    match.download = download;
+                    match.desc = desc;
+                    appState.addAuditLog(appState.currentUser.username, 'Product', 'Update Product', `Perbarui produk: ${name}`);
+                }
+            } else {
+                const newPrd = {
+                    id: `PRD-${Math.floor(10 + Math.random() * 90)}`,
+                    name,
+                    version,
+                    download,
+                    desc,
+                    status: 'Active'
+                };
+                appState.database.products.push(newPrd);
+                appState.addAuditLog(appState.currentUser.username, 'Product', 'Create Product', `Daftarkan software produk baru: ${name}`);
+            }
+
+            await appState.saveDatabase();
+            productModal.close();
+            showToast('Disimpan!', 'Informasi model integrasi produk berhasil disimpan', 'success');
+        });
+
+        async function actionDeleteProduct(id) {
+            if (confirm(`Hapus produk ini dari SDK Registry? Lisensi yang berjalan mungkin terganggu.`)) {
+                appState.database.products = appState.database.products.filter(p => p.id !== id);
+                appState.addAuditLog(appState.currentUser.username, 'Product', 'Delete Product', `Hapus integrasi produk ID: ${id}`);
+                await appState.saveDatabase();
+                showToast('Dihapus!', 'Integrasi produk software telah dihapus', 'danger');
+            }
+        }
+
+        // HWID ACTIONS
+        async function actionUnblacklistHWID(index) {
+            const removed = appState.database.blacklistHWID.splice(index, 1);
+            if (removed.length > 0) {
+                appState.addAuditLog(appState.currentUser.username, 'HWID', 'Unblacklist HWID', `Hapus ban hardware global perangkat: ${removed[0].hwid}`);
+                await appState.saveDatabase();
+                showToast('Hambatan Dilepas!', `HWID ${removed[0].hwid} berhasil di-unban`, 'success');
+            }
+        }
+
+        // GOOGLE APPS SCRIPT WEB APP API INTEGRATION MODULE
+        async function fetchFromGAS(action, payload) {
+            const gasUrl = appState.database.settings.gasUrl;
+            const secretToken = appState.database.settings.gasToken;
+
+            if (!gasUrl) {
+                return { success: true, localMock: true };
+            }
+
+            // Validasi format URL dasar agar tidak salah memasukkan URL Editor
+            if (!gasUrl.startsWith('https://script.google.com/') || !gasUrl.includes('/exec')) {
+                showToast('URL Tidak Valid', 'Pastikan Anda menyalin URL Web App (berakhiran /exec), bukan URL editor!', 'danger');
+                throw new Error('Invalid Web App URL');
+            }
+
+            try {
+                const response = await fetch(gasUrl, {
+                    method: 'POST',
+                    mode: 'cors',
+                    headers: {
+                        'Content-Type': 'text/plain' // Menggunakan text/plain murni tanpa charset tambahan
+                    },
+                    body: JSON.stringify({
+                        token: secretToken,
+                        action: action,
+                        data: payload
+                    })
+                });
+                
+                if (!response.ok) throw new Error('API server HTTP error');
+                
+                const text = await response.text();
+                try {
+                    return JSON.parse(text);
+                } catch(e) {
+                    // JIKA HASIL BUKAN JSON VALID, BERARTI DIALIHKAN KE HALAMAN LOGIN GOOGLE (Salah Permission)
+                    if (text.includes('google-signin') || text.includes('Sign in') || text.includes('login') || text.includes('accounts.google')) {
+                        showToast('Akses Ditolak!', 'Wajib ubah opsi "Who has access" di GAS menjadi "Anyone"!', 'danger');
+                        throw new Error('Google Sign-in redirect detected. Change access to Anyone.');
+                    }
+                    throw new Error('Response is not valid JSON: ' + text.substring(0, 100));
+                }
+            } catch (err) {
+                console.error("GAS Integration Error:", err);
+                showToast('Sync Gagal', 'Failed to fetch! Periksa setelan deployment "Anyone" di Google Apps Script Anda.', 'danger');
+                throw err;
+            }
+        }
+
+        // LOGIN SUBMISSION HANDLER
+        document.getElementById('login-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const u = document.getElementById('login-username').value;
+            const p = document.getElementById('login-password').value;
+
+            const errBox = document.getElementById('login-error');
+            const success = appState.login(u, p);
+
+            if (!success) {
+                errBox.classList.remove('hidden');
+                errBox.querySelector('span').textContent = "User tidak valid atau kredensial ditolak oleh Server!";
+            } else {
+                errBox.classList.add('hidden');
+            }
+        });
+
+        // LOGOUT SESSIONS
+        document.getElementById('btn-logout').addEventListener('click', () => {
+            appState.logout();
+        });
+
+        // INITIAL ONLOAD STARTUP ENGINE
+        window.onload = function() {
+            appState.init();
+            appState.navigateTo('dashboard');
+        }
+    </script>
+</body>
+</html>
